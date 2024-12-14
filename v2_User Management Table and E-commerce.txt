@@ -1,0 +1,345 @@
+-- _____________________________ tables  _____________________________
+
+-- Tabela principal de usuários conectada ao Supabase Auth
+create type user_type_enum as enum ('supplier', 'user');
+
+create table if not exists   
+  app_user (
+    id bigint primary key generated always as identity,
+    user_uuid uuid not null, -- Conectado ao ID gerado pelo Supabase Auth 
+    username varchar(20),
+    profile_pic text,
+    fullName text,
+    user_type user_type_enum not null, -- supplier or user
+    birth_date date,
+    nacionality text,
+    identity text unique,
+    cpf text unique,
+    created_at timestamp default now(), -- for audit
+    updated_at timestamp default now(), -- for audit
+    foreign key (user_uuid) references auth.users (id) on delete cascade,
+    check (date_part('year', AGE (birth_date)) >= 18) -- Verifica idade >= 18 anos
+  );
+
+ 
+create table if not exists
+  address (
+    id bigint primary key generated always as identity,
+    project_id bigint not null, -- adicionei essa linha para que o registro de endereço seja excluido em cascata (caso projeto seja excluido)
+    country text,
+    city text,
+    postal_code text,
+    house_number text,
+    created_at timestamp default now(), -- for audit
+    updated_at timestamp default now() -- for audit
+  );
+
+
+-- Pagamentos realizados pelo usuário
+create table if not exists
+  user_payment (
+    id bigint primary key generated always as identity,
+    user_id bigint not null,
+    payment_date timestamp with time zone not null,
+    value_payed numeric(9,2) not null,
+    foreign key (user_id) references app_user (id) on delete cascade
+  );
+
+
+-- tabelas referentes aos fornecedores:
+
+
+create table if not exists
+  supplier_details (
+    id bigint primary key generated always as identity,
+    cnpj varchar(18),
+    user_id bigint not null,
+    company_name varchar(30) not null, -- company's name of the supplier
+    service_region varchar(30) default 'Belo Jardim e agreste',
+    created_at timestamp default now(), -- for audit
+    updated_at timestamp default now(), -- for audit
+    foreign key (user_id) references app_user (id) on delete cascade
+  );
+
+
+create table if not exists
+  supplier_item (
+    id bigint primary key generated always as identity,
+    supplier_id bigint not null,
+    descProduct varchar(40),
+    product_url text not null,
+    category varchar(30) not null,
+    qty_in_store smallint not null,
+    price numeric(7,2) not null,
+    created_at timestamp default now(), -- for audit
+    updated_at timestamp default now(), -- for audit
+    foreign key (supplier_id) references supplier_details (id) on delete cascade
+  );
+
+
+-- Avaliações feitas pelos usuários
+create table if not exists
+  user_review (
+    id bigint primary key generated always as identity,
+    user_id bigint not null,
+    ordered_product_id bigint not null,
+    rating_value bigint not null check (rating_value <= 5),
+    comment text,
+    foreign key (user_id) references app_user (id) on delete cascade,
+    foreign key (ordered_product_id) references supplier_item (id) on delete cascade
+  );
+
+
+create table if not exists
+  template (
+    id bigint primary key generated always as identity,
+    name varchar(30) not null,
+    description text,
+    thumbnail_url text not null,
+    created_at timestamp default now(), -- for audit
+    updated_at timestamp default now() -- for audit
+  );
+
+
+create table if not exists
+  template_item (
+    id bigint primary key generated always as identity,
+    template_id bigint not null,
+    product_id bigint not null,
+    qty bigint not null,
+    created_at timestamp default now(), -- for audit
+    updated_at timestamp default now(),-- for audit
+    foreign key (template_id) references template (id) on delete cascade,
+    foreign key (product_id) references supplier_item (id) on delete cascade
+  );
+
+
+-- tabelas referentes aos projetos:
+
+create table if not exists
+  project (
+    id bigint primary key generated always as identity,
+    user_id bigint not null,
+    name varchar(30) not null,
+    estimated_price numeric(9,2) not null default 0.00,
+    address_id bigint,
+    event_date date, -- date that the event will happen
+    created_at timestamp default now(), -- for audit
+    updated_at timestamp default now(), -- for audit
+    foreign key (user_id) references app_user (id) on delete cascade,
+    foreign key (address_id) references address (id)
+  );
+
+
+alter table address
+  add constraint fk_project
+  FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE;
+
+
+create table if not exists
+  project_item (
+    id bigint primary key generated always as identity,
+    project_id bigint not null,
+    product_id bigint not null, -- this one references to supplier's products
+    qty smallint not null,
+    created_at timestamp default now(), -- for audit
+    updated_at timestamp default now(), -- for audit
+    foreign key (project_id) references project (id) on delete cascade,
+    foreign key (product_id) references supplier_item (id) on delete cascade, --aqui
+    check (qty > 0)
+  );
+
+
+-- _____________________________ constraints  _____________________________
+
+
+  -- restrição de unicidade para descProduct e category (dois produtos n devem ter ambos os campos iguais ao mesmo tempo)
+alter table supplier_item
+add constraint unique_product
+unique (descProduct, category);
+
+
+
+-- verifica se o supplier_id corresponde a um usuário cujo userType seja supplier.
+
+create or replace function check_supplier_user_type()
+returns trigger as $$
+begin
+    -- Check if the supplier_id corresponds to a user with userType 'supplier'
+    if not exists (
+        select 1
+        from app_user
+        where id = new.supplier_id
+        and userType = 'supplier'
+    ) then
+        raise exception 'supplier_id must correspond to a user with userType ''supplier''';
+    end if;
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger validate_supplier_user_type
+before insert or update on supplier_item
+for each row
+execute function check_supplier_user_type();
+
+
+
+-- _____________________________ functions  _____________________________
+
+create or replace function set_updated_at()
+returns trigger as $$
+begin
+    -- Atualiza a coluna updated_at com o timestamp atual
+    new.updated_at = now();
+    return new;
+end;
+$$ language plpgsql;
+
+
+-- _____________________________ triggers _____________________________
+
+
+create trigger update_project_item_timestamp
+before update on project_item
+for each row
+execute function set_updated_at();
+
+
+create trigger update_supplier_item_timestamp
+before update on supplier_item
+for each row
+execute function set_updated_at();
+
+
+
+
+
+/* -- não funciona
+-- Função para inserir um novo usuário cadastrado na tabela app_user
+CREATE OR REPLACE FUNCTION create_app_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.app_user (user_uuid, usertype)
+  VALUES (NEW.id, 'user'); -- NEW.id corresponde ao user_uuid do usuário registrou
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger para executar a função após inserir um novo usuário
+CREATE TRIGGER after_user_insert
+AFTER INSERT ON auth.users
+FOR EACH ROW
+EXECUTE FUNCTION create_app_user();
+*/
+
+
+-- polices ("acesso total" por enquanto)
+
+-- app_user
+create policy "acesso total"
+on "public"."app_user"
+as PERMISSIVE
+for ALL
+to public
+using (
+  true --change later
+)
+with check (
+  true
+);
+
+-- address
+create policy "acesso total"
+on "public"."address"
+as PERMISSIVE
+for ALL
+to public
+using (true)
+with check (true);
+
+-- project
+create policy "acesso total"
+on "public"."project"
+as PERMISSIVE
+for ALL
+to public
+using (true)
+with check (true);
+
+-- project_item
+create policy "acesso total"
+on "public"."project_item"
+as PERMISSIVE
+for ALL
+to public
+using (true)
+with check (true);
+
+-- supplier_details
+create policy "acesso total"
+on "public"."supplier_details"
+as PERMISSIVE
+for ALL
+to public
+using (true)
+with check (true);
+
+-- supplier_item
+create policy "acesso total"
+on "public"."supplier_item"
+as PERMISSIVE
+for ALL
+to public
+using (true)
+with check (true);
+
+-- template
+create policy "acesso total"
+on "public"."template"
+as PERMISSIVE
+for ALL
+to public
+using (true)
+with check (true);
+
+
+-- template_item
+create policy "acesso total"
+on "public"."template_item"
+as PERMISSIVE
+for ALL
+to public
+using (true)
+with check (true);
+
+-- user_payment
+create policy "acesso total"
+on "public"."user_payment"
+as PERMISSIVE
+for ALL
+to public
+using (true)
+with check (true);
+
+-- user_review
+create policy "acesso total"
+on "public"."user_review"
+as PERMISSIVE
+for ALL
+to public
+using (true)
+with check (true);
+
+
+-- enabling Row Level Security for each table
+ALTER TABLE "public"."address" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."app_user" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."project" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."project_item" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."supplier_details" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."supplier_item" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."template" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."template_item" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."user_payment" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."user_review" ENABLE ROW LEVEL SECURITY;
