@@ -1,0 +1,119 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    background-color: white;
+    width: 100vw;
+    height: 100vh;
+}
+
+header {
+    min-width: 150px;
+    text-align: left;
+    padding-top: 40px;
+    padding-left: 20px;
+    vertical-align: top;
+}
+
+header img {
+    display: inline-block;
+    width: 50px;
+    box-sizing: border-box;
+}
+
+header p {
+    display: inline-block;
+    box-sizing: border-box;
+    color: #fa2515;
+    padding-left: 10px;
+    transform: translateY(-10px);
+    font-weight: 500;
+    font-size: 36px;
+}
+
+main {
+    /*________Acho que vou tirar________*/
+    max-width: 700px;
+    margin: 0px auto;
+}
+
+
+
+section.form p {
+    padding-top: 24px;
+    padding-bottom: 12px;
+    padding-left: 10px;
+    box-sizing: border-box;
+    color: #57636c;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: left;
+}
+
+section.form input.campo {
+    display: block;
+    width: 80%;
+    height: 40px;
+    margin: 5px auto;
+    padding-bottom: 16px;
+    box-sizing: border-box;
+    font-weight: 500;
+    font-size: 14px;
+    border: 2px solid #e0e3e7;
+    border-radius: 40px;
+    overflow: hidden;
+    padding-left: 20px;
+}
+
+section.form input[type=submit] {
+    display: block;
+    box-sizing: border-box;
+    height: 52px;
+    background-color: #4b39ef;
+    color: white;
+    font-size: 14px;
+    width: 230px;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    margin: 0px auto;
+}
+
+section.form a {
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 14px;
+    width: 230px;
+    margin: 10px auto;
+    background-color: white;
+    border: 1px solid #306967;
+    border-radius: 60px;
+    cursor: pointer;
+}
+
+section.form a#sign-guest {
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 14px;
+    width: 230px;
+    margin: 10px auto;
+    background-color: white;
+    cursor: pointer;
+    border: none;
+}
+
+section.form a#sign-guest:hover {
+    border: 1px solid #306967;
+    border-radius: 60px;
+}
