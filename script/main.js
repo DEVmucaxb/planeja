@@ -6,14 +6,6 @@ const supabaseUrl = "https://euauwkgudmkyrutimfuk.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1YXV3a2d1ZG1reXJ1dGltZnVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQxMzYwMjYsImV4cCI6MjA0OTcxMjAyNn0.6tUueIlhyUlSJndKR9gG1sXBpnCMcJtxyEhf4kNprHI";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-//só pra pegar a largura do celular e do pc
-function showWindowDimensions() {
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    alert("Largura: " + width + "px, Altura: " + height + "px");
-  }
-showWindowDimensions();
-
 //______________________variaveis______________________
 
 let auth_row = JSON.parse(sessionStorage.getItem('auth_row')); //<objeto> na 1 vez retorna null
@@ -30,6 +22,31 @@ let app_user_row = JSON.parse(sessionStorage.getItem('app_user_row')) //<objeto>
 document.addEventListener("DOMContentLoaded", () => {
 
     //______________________funções______________________
+
+    //só pra pegar a largura do celular e do pc
+function showWindowDimensions() {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    alert("Largura: " + width + "px, Altura: " + height + "px");
+  }; showWindowDimensions();
+
+// detectar o dispositivo e carregar a CSS adequada
+function detectDevice() {
+    const userAgent = navigator.userAgent.toLowerCase();
+  
+    if (/mobile|android|iphone|ipad|ipod/.test(userAgent)) {
+      alert("Você está usando um dispositivo móvel!");
+      document.head.querySelector('link[rel="stylesheet"]').href = './style/mobile.css';
+    } else {
+      alert("Você está usando um computador ou laptop!");
+      document.head.querySelector('link[rel="stylesheet"]').href = './style/desktop.css';
+    };
+  }; detectDevice();
+
+
+
+
+
     // Função de login
     async function login(e) {
         e.preventDefault();
