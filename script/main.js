@@ -6,6 +6,14 @@ const supabaseUrl = "https://euauwkgudmkyrutimfuk.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1YXV3a2d1ZG1reXJ1dGltZnVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQxMzYwMjYsImV4cCI6MjA0OTcxMjAyNn0.6tUueIlhyUlSJndKR9gG1sXBpnCMcJtxyEhf4kNprHI";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+//só pra pegar a largura do celular e do pc
+function showWindowDimensions() {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    alert("Largura: " + width + "px, Altura: " + height + "px");
+  }
+showWindowDimensions();
+
 //______________________variaveis______________________
 
 let auth_row = JSON.parse(sessionStorage.getItem('auth_row')); //<objeto> na 1 vez retorna null
