@@ -7,7 +7,6 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 //______________________variaveis______________________
-
 //necessário para evitar bugs
 let currentPage; //<String>
 currentPage = document.body.getAttribute('data-currentPage');

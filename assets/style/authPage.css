@@ -17,7 +17,8 @@ body {
 }
 
 header {
-    min-width: 150px;
+    max-width: 400px;
+    margin: 0px auto;
     text-align: left;
     padding-top: 40px;
     padding-left: 20px;
@@ -39,8 +40,7 @@ header p {
 }
 
 main {
-    /*________Acho que vou tirar________*/
-    max-width: 700px;
+    max-width: 400px;
     margin: 0px auto;
 }
 
