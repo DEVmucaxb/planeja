@@ -7,7 +7,15 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 //______________________variaveis______________________
-let authenticated_user_data;
+
+let auth_row = JSON.parse(sessionStorage.getItem('auth_row')); //<objeto> na 1 vez retorna null
+// pra pegar uuid: auth_row.user.id
+
+let app_user_row = JSON.parse(sessionStorage.getItem('app_user_row')) //<objeto>
+
+
+
+
 
 
 
@@ -25,11 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             alert("Login bem-sucedido!");
         };
-        getUserUuid();
+        get_authRow();
     }
 
 
-    // Função para registrar o usuário e criar um registro em app_user
+    // Função para registrar o usuário e criar um registro em app_user_row
     async function registerUser(email, password) {
         try {
             // Etapa 1: Registrar o usuário no Supabase Auth
@@ -40,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (authError) throw new Error(`Erro ao registrar usuário: ${authError.message}`);
 
-            // Etapa 2: Criar registro na tabela app_user
+            // Etapa 2: Criar registro na tabela app_user_row
             const { data: userData, error: userError } = await supabase
                 .from("app_user")
                 .insert([
@@ -48,13 +56,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         user_uuid: authData.user.id, //id do supabase auth (auth.id)
                         user_type: "user"
                     },
-                ]);
+                ])
+                .select(); // Retorna os dados recém-inseridos;
 
-            if (userError) throw new Error(`Erro ao inserir na tabela app_user: ${userError.message}`);
+            if (userError) throw new Error(`Erro ao inserir na tabela app_user_row: ${userError.message}`);
 
-            alert("Usuário registrado com sucesso!"); //retorna null ??
-            console.log("Registro criado:", userData); //retorna null ??
-            getUserUuid();
+            alert("Usuário registrado com sucesso!");
+            app_user_row = userData;
+            sessionStorage.setItem("app_user_row", JSON.stringify(app_user_row));
+            console.log("Registro criado na tabela app_user: ", app_user_row);
+
+            get_authRow();
 
         } catch (error) {
             console.error(error.message);
@@ -64,18 +76,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     //função para pegar o uuid do usuário autenticado na tabela auth
-    async function getUserUuid() {
+    async function get_authRow() {
         const { data, error } = await supabase.auth.getUser();
         if (error) {
             console.error("Erro ao obter UUID:", error.message);
             return null;
         }
-        authenticated_user_data = data;
-        console.log(authenticated_user_data); //tá funcionando 
-        // [objeto] pra pegar uuid: authenticated_user_data.user.id
+        auth_row = data;
+        sessionStorage.setItem("auth_row", JSON.stringify(auth_row));
+        alert('Seu UUID: ' + auth_row.user.id);
+        // <objeto> pra pegar uuid: auth_row.user.id
 
-        alert('Seu UUID: ' + data.user.id);
     };
+
+
 
 
 
