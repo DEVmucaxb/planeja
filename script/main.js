@@ -30,22 +30,6 @@ function showWindowDimensions() {
     alert("Largura: " + width + "px, Altura: " + height + "px");
   }; showWindowDimensions();
 
-// detectar o dispositivo e carregar a CSS adequada
-function detectDevice() {
-    const userAgent = navigator.userAgent.toLowerCase();
-  
-    if (/mobile|android|iphone|ipad|ipod/.test(userAgent)) {
-      alert("Você está usando um dispositivo móvel!");
-      document.head.querySelector('link[rel="stylesheet"]').href = './style/mobile.css';
-    } else {
-      alert("Você está usando um computador ou laptop!");
-      document.head.querySelector('link[rel="stylesheet"]').href = './style/desktop.css';
-    };
-  }; detectDevice();
-
-
-
-
 
     // Função de login
     async function login(e) {
