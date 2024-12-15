@@ -8,6 +8,11 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 //______________________variaveis______________________
 
+//necessário para evitar bugs
+let currentPage; //<String>
+currentPage = document.body.getAttribute('data-currentPage');
+console.log('pagina atual ', currentPage);
+
 let auth_row = JSON.parse(sessionStorage.getItem('auth_row')); //<objeto> na 1 vez retorna null
 // pra pegar uuid: auth_row.user.id
 
@@ -24,11 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //______________________funções______________________
 
     //só pra pegar a largura do celular e do pc
-function showWindowDimensions() {
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    alert("Largura: " + width + "px, Altura: " + height + "px");
-  }; showWindowDimensions();
+    function showWindowDimensions() {
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        alert("Largura: " + width + "px, Altura: " + height + "px");
+    }; showWindowDimensions();
 
 
     // Função de login
@@ -104,21 +109,32 @@ function showWindowDimensions() {
 
 
     //______________________listeners______________________
+
+    //________authPages________
     //login
-    document.getElementById("login-form").addEventListener("submit", login);
+    if (currentPage === 'loginPage') {
+        document.getElementById("login-form").addEventListener("submit", login);
+    };
 
 
     // registrar usuário
-    document.getElementById("signup-form").addEventListener("submit", async (event) => {
-        event.preventDefault();
+    if (currentPage === 'signupPage') {
 
-        const email = document.getElementById("signup-email").value;
-        const password = document.getElementById("signup-password").value;
+        document.getElementById("signup-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
 
-        await registerUser(email, password);
+            const email = document.getElementById("signup-email").value;
+            const password = document.getElementById("signup-password").value;
 
-    });
+            await registerUser(email, password);
+
+        });
+    };
+
+    //________homePage________
+    if (currentPage === 'homePage') {
+        //code goes here
+    };
 
 });
 
-// daqui pra cima Ok
