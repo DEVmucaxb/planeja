@@ -62,6 +62,7 @@ section.form input.campo {
     height: 40px;
     margin: 5px auto;
     padding-bottom: 16px;
+    padding-top: 16px;
     font-weight: 500;
     font-size: 14px;
     border: 2px solid #e0e3e7;
