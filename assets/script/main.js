@@ -45,9 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Erro ao logar: " + error.message);
         } else {
             alert("Login bem-sucedido!");
+            await get_authRow();
+            window.location.href = "https://www.youtube.com/";
         };
-        get_authRow();
-    }
+    };
 
 
     // Função para registrar o usuário e criar um registro em app_user_row
@@ -79,7 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
             sessionStorage.setItem("app_user_row", JSON.stringify(app_user_row));
             console.log("Registro criado na tabela app_user: ", app_user_row);
 
-            get_authRow();
+            await get_authRow();
+            window.location.href = "https://www.youtube.com/";
 
         } catch (error) {
             console.error(error.message);
