@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+:root { /*colors for the bottom nav bar*/
+    --color1: #4b39ef;
+    --color2: #29fd53;
+}
+
 body {
     background-color: white;
     width: 100vw;
@@ -17,18 +22,18 @@ body {
     background-attachment: fixed;*/
 }
 
-/* isso atrapalha o scroll dos templates
 ::-webkit-scrollbar {
     width: 0px;
     height: 0px;
-}*/
+}
 
 div.appContainer {
     max-width: 400px;
     height: 100%;
     margin: auto;
 
-    background-color: #fa2515; /*tirar dps*/
+    background-color: #fa2515;
+    /*tirar dps*/
     background: url(../images/imgBackground/background1.jpg) no-repeat center center;
     background-size: cover;
     background-attachment: fixed;
@@ -38,7 +43,7 @@ header {
     min-height: 300px;
     max-width: 400px;
     margin: 0px auto;
-    padding-top: 50px;
+    padding-top: 30px;
     padding-left: 16px;
     padding-right: 16px;
     padding-bottom: 10px;
@@ -128,7 +133,8 @@ main section.templateSection {
 
     & div.templateItem {
         display: inline-block;
-        position: relative; /*perigoso*/
+        position: relative;
+        /*perigoso*/
 
         overflow: hidden;
         border-radius: 10px;
@@ -152,14 +158,112 @@ main section.templateSection {
 }
 
 footer {
-    background-color: #4b39ef;
+    background-color: red;
     color: #fff;
     text-align: center;
     height: 50px;
     width: 100%;
     max-width: 400px;
     margin: 0px auto;
-
+    transform:translateY(-50%);
     position: fixed;
     bottom: 0;
+}
+
+
+
+/* just for bottom nav bar (vou separar dps, navbar.css)*/
+
+div.navigation {
+    position: relative;
+    height: 70px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+div.navigation ul {
+    display: flex;
+    width: 350px;
+}
+
+div.navigation ul li {
+    position: relative;
+    list-style: none;
+    width: 70px;
+    height: 70px;
+    z-index: 1;
+}
+
+div.navigation ul li a {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+}
+
+div.navigation ul li a .icon {
+    position: relative;
+    display: block;
+    line-height: 75px;
+    /*ummmmm*/
+    font-size: 1.5em;
+    text-align: center;
+    transition: 0.5s;
+    color: var(--color1);
+}
+
+div.navigation ul li.active a .icon {
+    transform: translateY(-32px);
+}
+
+div.navigation ul li a .text {
+    position: absolute;
+    color: var(--color1);
+    font-weight: 400;
+    font-size: 0.75em;
+    letter-spacing: 0.05em;
+    transition: 0.5s;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+div.navigation ul li.active a .text {
+    opacity: 1;
+    transform: translateY(10px);
+}
+
+div.indicator {
+    position: absolute;
+    top: -50%;
+    width: 70px;
+    height: 70px;
+    background-color: var(--color2);
+    border-radius: 50%;
+    border: 6px solid var(--color1);
+    transition: 0.5s;
+}
+
+.indicator::before { /* never mind */}
+
+.navigation ul li:nth-child(1).active ~ .indicator {
+    transform: translateX(calc(70px * 0));
+}
+
+.navigation ul li:nth-child(2).active ~ .indicator {
+    transform: translateX(calc(70px * 1));
+}
+
+.navigation ul li:nth-child(3).active ~ .indicator {
+    transform: translateX(calc(70px * 2));
+}
+
+.navigation ul li:nth-child(4).active ~ .indicator {
+    transform: translateX(calc(70px * 3));
 }

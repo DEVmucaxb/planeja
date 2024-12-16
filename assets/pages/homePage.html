@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
     <script type="module" src="./script/main.js" defer></script>
     <link rel="stylesheet" href="../style/homePage.css">
     <title>Essa é a homePage</title>
@@ -41,18 +44,67 @@
             <section class="templateSection">
                 <!-- Carrosel dos templates -->
                 <div class="templateItem">
-                    <img src="../images/templates/beach_wedding.jpg" width="200px"/> <!--200px-->
+                    <img src="../images/templates/beach_wedding.jpg" width="200px" /> <!--200px-->
                     <input type="button" value="usar esse">
                 </div>
 
             </section>
         </main>
 
-        <footer>
-            this will be a bottom nav bar
+        <footer class="navigation">
+            <div class="navigation">
+                <ul>
+                    <li class="list active">
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="home-outline"></ion-icon>
+                            </span>
+                            <span class="text">Home</span>
+                        </a>
+                    </li>
+                    <li class="list">
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="albums-outline"></ion-icon>
+                            </span>
+                            <span class="text">Eventos</span>
+                        </a>
+                    </li>
+                    <li class="list">
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="albums-outline"></ion-icon>
+                            </span>
+                            <span class="text">Comprar</span>
+                        </a>
+                    </li>
+                    <li class="list">
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="person-outline"></ion-icon>
+                            </span>
+                            <span class="text">Perfil</span>
+                        </a>
+                    </li>
+
+                    <div class="indicator"></div>
+                </ul>
+            </div>
         </footer>
     </div>
 
+    <script>
+        const listElements = document.querySelectorAll('.list');
+        function activeLink() {
+            listElements.forEach((item) => {
+                item.classList.remove('active');
+                this.classList.add('active');
+            });
+        };
+        listElements.forEach((item) => {
+            item.addEventListener('click', activeLink);
+        });
+    </script>
 </body>
 
 </html>
