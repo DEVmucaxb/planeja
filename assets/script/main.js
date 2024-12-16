@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let width = window.innerWidth;
         let height = window.innerHeight;
         alert("Largura: " + width + "px, Altura: " + height + "px");
-    }; showWindowDimensions();
+    }; //showWindowDimensions();
 
 
     // Função de login
@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             alert("Login bem-sucedido!");
             await get_authUuid();
+            await get_appUserId();
             window.location.href = "./homePage.html";
         };
     };
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .from("app_user")
                 .insert([
                     {
-                        user_uuid: authData.user.id, //id do supabase auth (auth.id)
+                        user_uuid: authData.user.id, //id do supabase auth (auth.users.id)
                         user_type: "user"
                     },
                 ])
@@ -106,29 +107,24 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     async function get_appUserId() {
-        if (!auth_uuid) {
+        if (auth_uuid === '' || auth_uuid === null || auth_uuid === undefined) {
             await get_authUuid();
             if (!auth_uuid) { return }; //não está logado
-
         };
 
-        const { data, error } = await supabase.rpc('get_app_user_id', { parametro_uuid: auth_uuid });
+        
+        /* por algum motivo se não tiver essa função n() dá mais bug do que agora ...F */
+        async function n() {
+            let { data, error } = await supabase
+                .rpc('get_app_user_id', {
+                    parametro_uuid: auth_uuid
+                });
 
-        if (error) {
-            console.error("Erro ao chamar função RPC:", error.message);
-            return null;
-        }
-    
-        if (data && data.length > 0) {
-            console.log("ID obtido:", data[0].id);
+            console.log("ID obtido do usuário:", data[0].id);
+            alert("ID obtido do usuário:", data[0].id);
             app_user_id = data[0].id;
             sessionStorage.setItem("app_user_id", app_user_id);
-            return data[0].id;
-
-        } else {
-            console.warn("Nenhum usuário encontrado para o UUID:", uuid);
-            return null;
-        };
+            }; n();
     };
 
 
@@ -136,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const homePageFunctions = {
         'getUserEvents': async function () {
             if (!app_user_id) { await get_appUserId() } else {
-                const { data } = await supabase.rpc('get_project_summary', { parametro_id:app_user_id });
+                const { data } = await supabase.rpc('get_project_summary', { parametro_id: app_user_id });
                 console.log(data);
             };
         },
