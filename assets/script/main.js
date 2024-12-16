@@ -8,8 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 //______________________variaveis______________________
 //necessário para evitar bugs
-let currentPage; //<String>
-currentPage = document.body.getAttribute('data-currentPage');
+let currentPage = document.body.getAttribute('data-currentPage');
 console.log('pagina atual ', currentPage);
 
 let auth_uuid = sessionStorage.getItem('auth_uuid') || null;
@@ -129,6 +128,8 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
+
+
     //funções da homePage
     const homePageFunctions = {
         'getUserEvents': async function () {
@@ -173,8 +174,55 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    //______________________listeners______________________
+    //______________________navbar logic______________________
 
+    //verificar se a navbar está presente na página
+    if (['homePage', 'eventsPage', 'kartPage', 'profilePage']
+        .includes(currentPage)) {
+        //função da bottom navbar
+        function changePage(e) {
+            console.log(e);
+            const pageClicked = e.querySelector('a').getAttribute('data-navbar');
+            console.log(pageClicked);
+            setTimeout(() => {
+                //verificar se a pag clicada é diferente da atual
+                if (pageClicked !== currentPage) {
+                    console.log('mudando de pagina...');
+
+                    if (e === 'home') { 
+                        //window.location.href = "";
+                    };
+                    if (e === 'events') { 
+                        //window.location.href = "";
+                    };
+                    if (e === 'kart') { 
+                        //window.location.href = "";
+                    };
+                    if (e === 'profile') { 
+                        //window.location.href = "";
+                    };
+                };
+            }, 550);
+        };
+
+
+        const listElements = document.querySelectorAll('.list');
+        function activeLink() {
+            listElements.forEach((item) => {
+                item.classList.remove('active');
+                this.classList.add('active');
+            });
+            changePage(this);
+        };
+
+        listElements.forEach((item) => {
+            item.addEventListener('click', activeLink);
+        });
+    };
+
+
+
+    //______________________listeners______________________
     //________authPages________
     //login
     if (currentPage === 'loginPage') {
@@ -201,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //________homePage________
     if (currentPage === 'homePage') {
         //code goes here
-        console.log('página atual: ', )
+        console.log('página atual: ', currentPage)
         console.log('<homepage>seu uuid: ', auth_uuid);
         console.log('<homepage> seu app_user.id ', app_user_id);
 

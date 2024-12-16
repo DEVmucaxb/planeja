@@ -55,7 +55,7 @@
             <div class="navigation">
                 <ul>
                     <li class="list active">
-                        <a href="#">
+                        <a href="#" data-navbar="homePage">
                             <span class="icon">
                                 <ion-icon name="home-outline"></ion-icon>
                             </span>
@@ -63,7 +63,7 @@
                         </a>
                     </li>
                     <li class="list">
-                        <a href="#">
+                        <a href="#" data-navbar="eventsPage">
                             <span class="icon">
                                 <ion-icon name="albums-outline"></ion-icon>
                             </span>
@@ -71,7 +71,7 @@
                         </a>
                     </li>
                     <li class="list">
-                        <a href="#">
+                        <a href="#" data-navbar="kartPage">
                             <span class="icon">
                                 <ion-icon name="cart-outline"></ion-icon>
                             </span>
@@ -79,7 +79,7 @@
                         </a>
                     </li>
                     <li class="list">
-                        <a href="#">
+                        <a href="#" data-navbar="profilePage">
                             <span class="icon">
                                 <ion-icon name="person-outline"></ion-icon>
                             </span>
@@ -92,19 +92,6 @@
             </div>
         </footer>
     </div>
-
-    <script>
-        const listElements = document.querySelectorAll('.list');
-        function activeLink() {
-            listElements.forEach((item) => {
-                item.classList.remove('active');
-                this.classList.add('active');
-            });
-        };
-        listElements.forEach((item) => {
-            item.addEventListener('click', activeLink);
-        });
-    </script>
 </body>
 
 </html>
