@@ -14,12 +14,6 @@ body {
     background-color: white;
     width: 100vw;
     height: 100vh;
-
-    /*
-    background-color: #fa2515;
-    background: url(../images/imgBackground/background1.jpg) no-repeat center center;
-    background-size: cover;
-    background-attachment: fixed;*/
 }
 
 ::-webkit-scrollbar {
@@ -31,13 +25,7 @@ div.appContainer {
     max-width: 400px;
     height: 100%;
     margin: auto;
-
-    background-color: #fa2515;
-    /*tirar dps*/
-    background: url(../images/imgBackground/background1.jpg) no-repeat center center;
-    background-size: cover;
-    background-attachment: fixed;
-    overflow: hidden;
+    background-color: bisque;
 }
 
 header {
@@ -67,17 +55,11 @@ header div.appbar img {
 
 header div.appbar p {
     display: inline-block;
-    color: #fff;
+    color: #fa2515;
     padding-left: 10px;
     transform: translateY(-10px);
     font-weight: 500;
     font-size: 36px;
-}
-
-header div.advertisement {
-    background-color: #fff;
-    padding: 5px;
-    border: 1px solid #4b39ef;
 }
 
 main {
@@ -85,82 +67,8 @@ main {
     padding-right: 16px;
 }
 
-main section.eventsSection {
-    min-height: 50px;
-    background-color: white;
-    border: none;
-    border-radius: 12px;
-    padding-top: 10px;
-    padding-left: 16px;
-    padding-right: 16px;
-    overflow-y: scroll;
-}
-
-main section.eventsSection div.event {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    & p.eventName {
-        color: black;
-    }
-
-    & div.subscore {
-        padding-left: 15%;
-
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-    }
-}
-
-
-main p.template_hr {
-    color: #fff;
-    text-align: center;
-    padding-top: 20px;
-    padding-bottom: 10px;
-    font-size: 18px;
-    font-weight: normal;
-}
-
-main section.templateSection {
-    padding: 10px;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    background-color: #fff;
-
-    & div.templateItem {
-        display: inline-block;
-        position: relative;
-        /*perigoso*/
-
-        overflow: hidden;
-        border-radius: 10px;
-
-        & input[type="button"] {
-            display: inline-block;
-            position: absolute;
-            background-color: #fa2515;
-            color: white;
-            padding: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            border: 1px solid #000;
-            border-radius: 16px;
-
-            left: 50%;
-            top: 90%;
-            transform: translate(-50%, -100%);
-        }
-    }
-}
-
 footer {
-    background-color: red;
+    background-color: none;
     color: #fff;
     text-align: center;
     height: 50px;

@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //______________________navbar logic______________________
 
     //verificar se a navbar está presente na página
-    if (['homePage', 'eventsPage', 'kartPage', 'profilePage']
+    if (['homePage', 'eventsPage', 'productsPage', 'profilePage']
         .includes(currentPage)) {
         //função da bottom navbar
         function changePage(e) {
@@ -196,16 +196,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (pageClicked !== currentPage) {
                     console.log('mudando de pagina...');
 
-                    if (e === 'home') {
+                    if (pageClicked === 'homePage') {
+                        window.location.href = "../pages/homePage.html";
+                    };
+                    if (pageClicked === 'eventsPage') {
                         //window.location.href = "";
                     };
-                    if (e === 'events') {
-                        //window.location.href = "";
+                    if (pageClicked === 'productsPage') {
+                        window.location.href = "../pages/productsPage.html";
                     };
-                    if (e === 'kart') {
-                        //window.location.href = "";
-                    };
-                    if (e === 'profile') {
+                    if (pageClicked === 'profilePage') {
                         //window.location.href = "";
                     };
                 };
