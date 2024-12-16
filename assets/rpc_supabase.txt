@@ -25,3 +25,26 @@ select * from get_project_summary(10);
 
 /*FUNCIONAAAAAAAAAAAAAAAA*/
 /* 100% confiável */
+
+
+
+
+
+
+
+
+
+
+
+-- criação da stored procedure que pega o id do usuário autenticado
+CREATE OR REPLACE FUNCTION get_app_user_id(parametro_uuid uuid)
+RETURNS TABLE(id bigint) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT app_user.id
+    FROM app_user
+    WHERE app_user.user_uuid = parametro_uuid;
+END;
+$$ LANGUAGE plpgsql;
+
+/* funciona, é 100% confiável */
