@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
         auth_uuid = data.user.id;
         sessionStorage.setItem("auth_uuid", auth_uuid);
-        alert('Seu UUID: ' + auth_uuid);
+        //alert('Seu UUID: ' + auth_uuid);
 
     };
 
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!auth_uuid) { return }; //não está logado
         };
 
-        
+
         /* por algum motivo se não tiver essa função n() dá mais bug do que agora ...F */
         async function n() {
             let { data, error } = await supabase
@@ -120,22 +120,52 @@ document.addEventListener("DOMContentLoaded", () => {
                     parametro_uuid: auth_uuid
                 });
 
-            console.log("ID obtido do usuário:", data[0].id);
-            alert("ID obtido do usuário:", data[0].id);
             app_user_id = data[0].id;
             sessionStorage.setItem("app_user_id", app_user_id);
-            }; n();
+            console.log("ID obtido do usuário:", app_user_id);
+            alert("ID obtido do usuário:", app_user_id);
+
+        }; n();
     };
 
 
     //funções da homePage
     const homePageFunctions = {
         'getUserEvents': async function () {
-            if (!app_user_id) { await get_appUserId() } else {
-                const { data } = await supabase.rpc('get_project_summary', { parametro_id: app_user_id });
-                console.log(data);
+            if (!app_user_id) { await get_appUserId() }
+            const { data } = await supabase.rpc('get_project_summary', { parametro_id: app_user_id });
+            console.log(data);
+
+            let listSize = data.length;
+            console.log('tamanho array', listSize); listSize=10;
+
+            for (let i; i < listSize; i++) {
+                console.log(data[i]); alert(i)
+
+                const divItem = window.document.createElement('div');
+                div.classList.add('event');
+                const p = window.document.document.createElement('p');
+                pEventName.classList.add('eventName');
+                const divSubscore = window.document.createElement('div');
+                divSubscore.classList.add('subscore');
+                const pPrefix = window.document.createElement('p');
+                pPrefix.innerText = 'R$';
+                const pSubtotal = window.document.createElement('p');
+                pSubtotal.classList.add('subtotal');
+
+                //adicionar tudo ao divItem
+                divItem.appendChild(pEventName);
+                divItem.appendChild(divSubscore);
+                divItem.appendChild(pPrefix);
+                divItem.appendChild(pSubtotal);
+
+                eventsSectionEl = document.querySelector('section.eventsSection');
+                eventsSectionEl.innerHTML = '';
+                eventsSectionEl.appendChild(divItem);
             };
-        },
+
+
+        }
     };
 
 
@@ -167,6 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //________homePage________
     if (currentPage === 'homePage') {
         //code goes here
+        console.log('página atual: ', )
         console.log('<homepage>seu uuid: ', auth_uuid);
         console.log('<homepage> seu app_user.id ', app_user_id);
 
