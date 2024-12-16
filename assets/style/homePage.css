@@ -93,6 +93,7 @@ main section.eventsSection {
     padding-top: 10px;
     padding-left: 16px;
     padding-right: 16px;
+    overflow-y: scroll;
 }
 
 main section.eventsSection div.event {

@@ -136,31 +136,35 @@ document.addEventListener("DOMContentLoaded", () => {
             const { data } = await supabase.rpc('get_project_summary', { parametro_id: app_user_id });
             console.log(data);
 
-            let listSize = data.length;
-            console.log('tamanho array', listSize); listSize=10;
+            const listSize = data.length;
+            console.log('tamanho array', listSize);
 
-            for (let i; i < listSize; i++) {
-                console.log(data[i]); alert(i)
+            const eventsSectionEl = document.querySelector('section.eventsSection');
+            eventsSectionEl.innerHTML = '';
+
+            for (let i = 0; i < listSize; i++) {
+                console.log(data[i]); console.log(i);
 
                 const divItem = window.document.createElement('div');
-                div.classList.add('event');
-                const p = window.document.document.createElement('p');
+                divItem.classList.add('event');
+                const pEventName = window.document.createElement('p');
                 pEventName.classList.add('eventName');
+                pEventName.innerText = `${data[i].project_name}`
                 const divSubscore = window.document.createElement('div');
                 divSubscore.classList.add('subscore');
                 const pPrefix = window.document.createElement('p');
                 pPrefix.innerText = 'R$';
                 const pSubtotal = window.document.createElement('p');
                 pSubtotal.classList.add('subtotal');
+                pSubtotal.innerText = `${data[i].subtotal}`;
+
+                divSubscore.appendChild(pPrefix);
+                divSubscore.appendChild(pSubtotal);
 
                 //adicionar tudo ao divItem
                 divItem.appendChild(pEventName);
                 divItem.appendChild(divSubscore);
-                divItem.appendChild(pPrefix);
-                divItem.appendChild(pSubtotal);
 
-                eventsSectionEl = document.querySelector('section.eventsSection');
-                eventsSectionEl.innerHTML = '';
                 eventsSectionEl.appendChild(divItem);
             };
 
