@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             alert("Login bem-sucedido!");
             await get_authRow();
-            window.location.href = "https://www.youtube.com/";
+            window.location.href = "./homePage.html";
         };
     };
 
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Registro criado na tabela app_user: ", app_user_row);
 
             await get_authRow();
-            window.location.href = "https://www.youtube.com/";
+            window.location.href = "./homePage.html";
 
         } catch (error) {
             console.error(error.message);
@@ -132,9 +132,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
+
+
     //________homePage________
     if (currentPage === 'homePage') {
         //code goes here
+        console.log('seu uuid homepage ', auth_row);
     };
 
 });

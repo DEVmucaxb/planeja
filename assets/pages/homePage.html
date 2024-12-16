@@ -1,11 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planejá</title>
+    <script type="module" src="./script/main.js" defer></script>
+    <link rel="stylesheet" href="../style/homePage.css">
+    <title>Essa é a homePage</title>
 </head>
+
 <body data-currentPage="homePage">
-    <h1>Essa é a homePage</h1>
+    <div class="appContainer">
+        <header>
+            <div class="appbar">
+                <img src="../images/icons/planeja_logo.png" alt="logo">
+                <p>Planejá</p>
+                <img src="../images/icons/default_profile_pic.jpg" alt="foto de perfil">
+            </div>
+
+            <div class="advertisement">
+                <img src="../images/icons/magalu.jpg" alt="anúncio">
+            </div>
+        </header>
+
+        <main>
+            <section class="eventsSection">
+                <div class="event">
+                    <p class="eventName">
+                        nome evento
+                    </p>
+                    <div class="subscore">
+                        <p>R$</p>
+                        <p class="subtotal">13.000,00</p>
+                    </div>
+                </div>
+            </section>
+
+            <p class="template_hr">____________templates____________</p>
+
+            <section class="templateSection">
+                <!-- Carrosel dos templates -->
+                <div class="templateItem">
+                    <img src="../images/templates/beach_wedding.jpg" width="200px"/> <!--200px-->
+                    <input type="button" value="usar esse">
+                </div>
+
+            </section>
+        </main>
+
+        <footer>
+            this will be a bottom nav bar
+        </footer>
+    </div>
+
 </body>
+
 </html>
