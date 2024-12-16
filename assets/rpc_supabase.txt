@@ -1,0 +1,27 @@
+-- Criação da stored procedure que pega todos os eventos em que o project.user_id = parametro fornecido (id do usuário)
+CREATE OR REPLACE FUNCTION get_project_summary(parametro_id BIGINT)
+RETURNS TABLE (
+    project_name VARCHAR(30),
+    project_id BIGINT,
+    event_id BIGINT,
+    subtotal NUMERIC(9,2)
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        p.name AS project_name,
+        p.id AS project_id,
+        p.id AS event_id,
+        COALESCE(SUM(si.price * pi.qty), 0) AS subtotal
+    FROM project p
+    LEFT JOIN project_item pi ON p.id = pi.project_id
+    LEFT JOIN supplier_item si ON pi.product_id = si.id
+    WHERE p.user_id = parametro_id
+    GROUP BY p.id;
+END;
+$$ LANGUAGE plpgsql;
+
+select * from get_project_summary(10);
+
+/*FUNCIONAAAAAAAAAAAAAAAA*/
+/* 100% confiável */

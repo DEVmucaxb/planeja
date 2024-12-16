@@ -159,7 +159,7 @@ add constraint unique_product
 unique (descProduct, category);
 
 
-
+/* -- Não funciona (Doesn't work)
 -- verifica se o supplier_id corresponde a um usuário cujo userType seja supplier.
 
 create or replace function check_supplier_user_type()
@@ -182,7 +182,7 @@ create trigger validate_supplier_user_type
 before insert or update on supplier_item
 for each row
 execute function check_supplier_user_type();
-
+*/
 
 
 -- _____________________________ functions  _____________________________

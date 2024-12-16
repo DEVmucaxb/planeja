@@ -37,6 +37,7 @@ div.appContainer {
     background: url(../images/imgBackground/background1.jpg) no-repeat center center;
     background-size: cover;
     background-attachment: fixed;
+    overflow: hidden;
 }
 
 header {
