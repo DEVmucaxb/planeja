@@ -25,6 +25,7 @@ body {
 
 div.appContainer {
     max-width: 400px;
+    height: 100%;
     margin: auto;
 
     background-color: #fa2515; /*tirar dps*/
@@ -155,4 +156,10 @@ footer {
     color: #fff;
     text-align: center;
     height: 50px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0px auto;
+
+    position: fixed;
+    bottom: 0;
 }
