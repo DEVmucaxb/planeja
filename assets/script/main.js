@@ -135,10 +135,14 @@ document.addEventListener("DOMContentLoaded", () => {
         'getUserEvents': async function () {
             if (!app_user_id) { await get_appUserId() }
             const { data } = await supabase.rpc('get_project_summary', { parametro_id: app_user_id });
+
+            console.log(`valor enviado como parametro pela getUserEvents = ${app_user_id}`)
             console.log(data);
 
             const listSize = data.length;
             console.log('tamanho array', listSize);
+
+            if (listSize < 1 || listSize === null || listSize === undefined) { return; };
 
             const eventsSectionEl = document.querySelector('section.eventsSection');
             eventsSectionEl.innerHTML = '';
@@ -148,6 +152,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const divItem = window.document.createElement('div');
                 divItem.classList.add('event');
+                //depois:
+                // divItem.innerHtml = `<div class="event"><p class="eventName">${dada[i].project_name} ..........<p>`
+
                 const pEventName = window.document.createElement('p');
                 pEventName.classList.add('eventName');
                 pEventName.innerText = `${data[i].project_name}`
@@ -189,16 +196,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (pageClicked !== currentPage) {
                     console.log('mudando de pagina...');
 
-                    if (e === 'home') { 
+                    if (e === 'home') {
                         //window.location.href = "";
                     };
-                    if (e === 'events') { 
+                    if (e === 'events') {
                         //window.location.href = "";
                     };
-                    if (e === 'kart') { 
+                    if (e === 'kart') {
                         //window.location.href = "";
                     };
-                    if (e === 'profile') { 
+                    if (e === 'profile') {
                         //window.location.href = "";
                     };
                 };
