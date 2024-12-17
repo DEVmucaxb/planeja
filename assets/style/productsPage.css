@@ -159,6 +159,7 @@ main div.productCard .cardMain .cardInfo .cardActions {
 
 
 main div.productCard .cardDesc {
+    padding-top: 5px;
     height: 50%;
 }
 
