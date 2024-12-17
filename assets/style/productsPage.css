@@ -5,7 +5,8 @@
     box-sizing: border-box;
 }
 
-:root { /*colors for the bottom nav bar*/
+:root {
+    /*colors for the bottom nav bar*/
     --color1: #4b39ef;
     --color2: #29fd53;
 }
@@ -20,7 +21,7 @@ body {
 ::-webkit-scrollbar {
     width: 0px;
     height: 0px;
-} 
+}
 
 div.appContainer {
     max-width: 400px;
@@ -30,10 +31,10 @@ div.appContainer {
     /* these are for to make the app scrollable*/
     display: flex;
     flex-wrap: nowrap;
-	flex-direction: column;
+    flex-direction: column;
 
     flex: 1 1 auto;
-	overflow-y: scroll;
+    overflow-y: scroll;
 }
 
 header {
@@ -69,6 +70,33 @@ header div.appbar p {
     transform: translateY(-10px);
     font-weight: 500;
     font-size: 36px;
+}
+
+header div.searchBar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    & input[type=text] {
+        width: 60%;
+        height: 32px;
+        padding: 4px;
+        border-radius: 10px;
+    }
+
+    & input[type=button] { /*depois, adicionar a lógica para que se o botão for pra baixo (flexwrap) ele fique alinhado á direita*/
+        width: 30%;
+        height: 32px;
+        padding: 2px;
+        border: none;
+        border-radius: 10px;
+        background-color: #fa2515;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+    }
 }
 
 main {
@@ -108,9 +136,11 @@ main div.productCard .cardMain .cardImage {
     height: 100%;
 
     display: flex;
+
     /*flex-direction: column;
     justify-content: center;
-    align-items: center;*/ /* dont put this code*/
+    align-items: center;*/
+    /* dont put this code*/
     & img {
         width: 100%;
         border-radius: 16px;
@@ -132,6 +162,7 @@ main div.productCard .cardMain .cardInfo {
 main div.productCard .cardMain .cardInfo .cardName {
     height: 50%;
     padding: 10px;
+    font-weight: bold;
 }
 
 main div.productCard .cardMain .cardInfo .cardActions {
@@ -176,7 +207,7 @@ footer {
     width: 100%;
     max-width: 400px;
     margin: 0px auto;
-    transform:translateY(-50%);
+    transform: translateY(-50%);
     position: fixed;
     bottom: 0;
 }
@@ -261,20 +292,22 @@ div.indicator {
     transition: 0.5s;
 }
 
-.indicator::before { /* never mind */}
+.indicator::before {
+    /* never mind */
+}
 
-.navigation ul li:nth-child(1).active ~ .indicator {
+.navigation ul li:nth-child(1).active~.indicator {
     transform: translateX(calc(70px * 0));
 }
 
-.navigation ul li:nth-child(2).active ~ .indicator {
+.navigation ul li:nth-child(2).active~.indicator {
     transform: translateX(calc(70px * 1));
 }
 
-.navigation ul li:nth-child(3).active ~ .indicator {
+.navigation ul li:nth-child(3).active~.indicator {
     transform: translateX(calc(70px * 2));
 }
 
-.navigation ul li:nth-child(4).active ~ .indicator {
+.navigation ul li:nth-child(4).active~.indicator {
     transform: translateX(calc(70px * 3));
 }

@@ -181,7 +181,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    async function renderProducts(filter) {
+    async function renderProducts() {
+
+        let filter = document.querySelector('#search_input').value;
+
         if (!filter) { filter = null }; //dá erro se não tiver
         try {
             // Chamada da função RPC no Supabase
@@ -265,8 +268,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const category = dataElement.getAttribute('data-category');
         const qty_in_store = dataElement.getAttribute('data-qty_in_store');
 
-        console.log(`id produto: ${product_id}, id fornecedor: ${supplier_id}, nome empresa: ${supplier_company}, nome produto: ${nameproduct}, descrição: ${descproduct}, preço: ${price.toFixed(2)}, url: ${product_url}, categoria: ${category}, qtde: ${qty_in_store}`);
+        console.log(`id produto: ${product_id}, id fornecedor: ${supplier_id}, nome empresa: ${supplier_company}, nome produto: ${nameproduct}, descrição: ${descproduct}, preço: ${parseFloat(price).toFixed(2)}, url: ${product_url}, categoria: ${category}, qtde: ${qty_in_store}`);
         // tudo ok daqui pra cima
+
+        
     };
 
 
@@ -352,9 +357,11 @@ document.addEventListener("DOMContentLoaded", () => {
         homePageFunctions.getUserEvents();
     };
 
-    //________homePage________
+    //________productsPage________
     if (currentPage === 'productsPage') {
         renderProducts();
+        
+        document.querySelector('#search_button').addEventListener('click', renderProducts);
     };
 
 });
