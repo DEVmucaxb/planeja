@@ -181,39 +181,93 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    function renderProducts() {
-        //get the products from supabase
+    async function renderProducts(filter) {
+        if (!filter) { filter = null }; //dá erro se não tiver
+        try {
+            // Chamada da função RPC no Supabase
+            //get the products from supabase by RPC
+            const { data, error } = await supabase.rpc('filter_products', { filtro_produtos: filter });
 
-        //clear all of the current data in <main> tag of HTML
-        document.querySelector('main').innerHTML = ''
+            // Verificação de erros na resposta
+            if (error) {
+                console.error("Erro ao buscar produtos:", error.message);
+                return;
+            }
+            console.log(data); // for debug
 
-        //render products    
-        for (let j = 0; j <= data.length; j++) {
-            const cardItem = window.document.createElement('div');
-            cardItem.classList.add("cardContainer");
-            cardItem.innerHtml = `<div class="productCard">
-                    <div class="cardMain">
-                        <div class="cardImage">
-                            <img src="${data[j].product_url}" alt="imagem produto">
-                        </div>
-                        <div class="cardInfo">
-                            <div class="cardName">
-                                <p>${data[j].nameproduct}</p>
+            // limpa todos os elementos dentro da tag <main> no HTML
+            const mainElement = document.querySelector('main');
+            mainElement.innerHTML = '';
+
+            // render products
+            data.forEach(product => {
+                const cardItem = document.createElement('div');
+                cardItem.classList.add("cardContainer");
+                cardItem.innerHTML = `
+                        <div class="productCard">
+                            <div class="cardMain">
+                                <div class="cardImage">
+                                    <img src="${product.product_url}" alt="imagem produto">
+                                </div>
+                                <div class="cardInfo">
+                                    <div class="cardName">
+                                        <p>${product.nameproduct}</p>
+                                    </div>
+                                    <div class="cardActions">
+                                        <p>R$ ${product.price.toFixed(2)}</p>
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="cardActions">
-                                <p>R$ ${data[j].price}</p>
-                                <ion-icon name="add-outline"></ion-icon>
+                            <div class="cardDesc">
+                                <p class="descProduct">${product.descproduct}</p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="cardDesc">
-                        <p class="descProduct">${data[j].descproduct}</p>
-                    </div>
-                </div>`
+                        </div>`;
 
-            document.querySelector('').appendChild(cardItem);
-        };
-    }
+
+
+                        const ionIcon = cardItem.querySelector('ion-icon');
+
+            // Adiciona atributos `data-*` no ícone
+            ionIcon.dataset.product_id = product.product_id;
+            ionIcon.dataset.supplier_id = product.supplier_id;
+            ionIcon.dataset.supplier_company = product.supplier_company;
+            ionIcon.dataset.nameproduct = product.nameproduct;
+
+            ionIcon.dataset.descproduct = product.descproduct;
+            ionIcon.dataset.price = product.price;
+            ionIcon.dataset.product_url = product.product_url;
+            ionIcon.dataset.category = product.category;
+            ionIcon.dataset.qty_in_store = product.qty_in_store;
+
+            // Adiciona o evento `click` ao ícone
+            ionIcon.addEventListener('click', () => {
+                showModal(ionIcon);
+            });
+
+                // Adiciona o card ao elemento <main>
+                mainElement.appendChild(cardItem);
+            });
+
+        } catch (err) {
+            console.error("Erro inesperado:", err);
+        }
+    };
+
+    function showModal(dataElement) {
+        const product_id = dataElement.getAttribute('data-product_id');
+        const supplier_id = dataElement.getAttribute('data-supplier_id');
+        const supplier_company = dataElement.getAttribute('data-supplier_company');
+        const nameproduct = dataElement.getAttribute('data-nameproduct');
+        const descproduct = dataElement.getAttribute('data-descproduct');
+        const price = dataElement.getAttribute('data-price');
+        const product_url = dataElement.getAttribute('data-product_url');
+        const category = dataElement.getAttribute('data-category');
+        const qty_in_store = dataElement.getAttribute('data-qty_in_store');
+
+        console.log(`id produto: ${product_id}, id fornecedor: ${supplier_id}, nome empresa: ${supplier_company}, nome produto: ${nameproduct}, descrição: ${descproduct}, preço: ${price.toFixed(2)}, url: ${product_url}, categoria: ${category}, qtde: ${qty_in_store}`);
+        // tudo ok daqui pra cima
+    };
 
 
     //______________________navbar logic______________________
@@ -296,6 +350,11 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('<homepage> seu app_user.id ', app_user_id);
 
         homePageFunctions.getUserEvents();
+    };
+
+    //________homePage________
+    if (currentPage === 'productsPage') {
+        renderProducts();
     };
 
 });
