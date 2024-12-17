@@ -66,6 +66,7 @@ create table if not exists
   supplier_item (
     id bigint primary key generated always as identity,
     supplier_id bigint not null,
+    nameProduct varchar(30) not null,
     descProduct varchar(40),
     product_url text not null,
     category varchar(30) not null,

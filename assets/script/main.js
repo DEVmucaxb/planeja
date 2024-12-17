@@ -181,6 +181,41 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
+    function renderProducts() {
+        //get the products from supabase
+
+        //clear all of the current data in <main> tag of HTML
+        document.querySelector('main').innerHTML = ''
+
+        //render products    
+        for (let j = 0; j <= data.length; j++) {
+            const cardItem = window.document.createElement('div');
+            cardItem.classList.add("cardContainer");
+            cardItem.innerHtml = `<div class="productCard">
+                    <div class="cardMain">
+                        <div class="cardImage">
+                            <img src="${data[j].product_url}" alt="imagem produto">
+                        </div>
+                        <div class="cardInfo">
+                            <div class="cardName">
+                                <p>${data[j].nameproduct}</p>
+                            </div>
+                            <div class="cardActions">
+                                <p>R$ ${data[j].price}</p>
+                                <ion-icon name="add-outline"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cardDesc">
+                        <p class="descProduct">${data[j].descproduct}</p>
+                    </div>
+                </div>`
+
+            document.querySelector('').appendChild(cardItem);
+        };
+    }
+
+
     //______________________navbar logic______________________
 
     //verificar se a navbar está presente na página

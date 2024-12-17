@@ -48,3 +48,51 @@ END;
 $$ LANGUAGE plpgsql;
 
 /* funciona, é 100% confiável */
+
+
+
+
+
+
+
+
+
+
+create or replace function public.filter_products(filtro_produtos text default null)
+returns table(
+    product_id bigint,
+    supplier_id bigint,
+    supplier_company varchar,
+    nameproduct varchar,
+    descproduct varchar,
+    price numeric,
+    product_url text,
+    category varchar,
+    qty_in_store smallint
+)
+language sql
+as $$
+  select 
+    si.id as product_id,
+    si.supplier_id,
+    sd.company_name as supplier_company,
+    si.nameproduct,
+    si.descproduct,
+    si.price,
+    si.product_url,
+    si.category,
+    si.qty_in_store
+  from 
+    public.supplier_item si
+  join 
+    public.supplier_details sd
+  on 
+    si.supplier_id = sd.id
+  where 
+    filtro_produtos is null or si.nameproduct ilike '%' || filtro_produtos || '%';
+$$;
+
+-- select * from public.filter_products();
+-- select * from public.filter_products('filtro');
+
+-- FUNCIONA PERFEITAMENTE
