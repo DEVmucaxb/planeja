@@ -74,19 +74,22 @@ header div.appbar p {
 main {
     padding-left: 16px;
     padding-right: 16px;
+    padding-bottom: 120px;
 }
 
 main div.cardContainer {
-    padding-top: 16px;
+    padding-top: 24px;
 }
 
 main div.productCard {
     background-color: #fff;
-    padding-top: 8px;
+    padding: 4px;
     padding-left: 16px;
     padding-right: 16px;
     min-height: 200px;
     max-height: 300px;
+    border: 1px solid black;
+    border-radius: 20px;
 
     display: flex;
     flex-wrap: nowrap;
@@ -110,6 +113,7 @@ main div.productCard .cardMain .cardImage {
     align-items: center;*/ /* dont put this code*/
     & img {
         width: 100%;
+        border-radius: 16px;
     }
 }
 
