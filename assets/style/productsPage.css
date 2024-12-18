@@ -36,8 +36,9 @@ dialog {
     top: 50%;
     transform: translate(-50%, -50%);
 
-    width: 60vw;
+    width: 80vw;
     border-radius: 10px;
+    padding-bottom: 10px;
     z-index: 1;
 }
 
