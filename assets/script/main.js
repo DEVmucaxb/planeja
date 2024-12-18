@@ -257,6 +257,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    // add a product in the kart
+    function addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store, qty_selected) {
+        console.log(`<function addKart> dados recebidos: ${nameproduct}, ${product_url} o usuário quer ${qty_selected} unidades`); // tá funcionando!
+    };
+
     function showModal(dataElement) {
         const product_id = dataElement.getAttribute('data-product_id');
         const supplier_id = dataElement.getAttribute('data-supplier_id');
@@ -283,18 +288,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // add a product in the kart
         document.querySelector('input.confirm_dialog').addEventListener('click', () => {
+            console.log("teste, deu recursividade aqui"); //até agora tava ok, mas aqui executa 2 vezes
+            
+
+            // qty that the user wants to buy
+            const qty_selected = parseInt(dialog.querySelector('input[type="number"]').value);
+
             // data to send for addKart function
-            addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store);
+            addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store, qty_selected);
 
             // close the dialog
             dialog.style.display = 'none';
             dialog.querySelector('input[type="number"]').value = 1;
         });
-    };
-
-    // add a product in the kart
-    function addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store) {
-        console.log(`<function addKart> dados recebidos: ${nameproduct}, ${product_url}`); // tá funcionando!
     };
 
 
