@@ -524,8 +524,96 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         // Exibe os dados retornados
-        console.log('Projetos do usuário:', data);
+        console.log('<getUserProjects> Projetos do usuário:', data);
     };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // código do chatgpt para suprir a falta da RPC  get_product_items
+
+    /** 
+        * @param { number } projectId // ID do projeto a ser consultado
+        * @returns { Promise < Array >} // Retorna uma promessa com os dados do projeto
+        */
+    async function getProjectItems(projectId) {
+        try {
+            // Passo 1: Buscar dados de `project_item`
+            const { data: projectItems, error: errorProjectItems } = await supabase
+                .from('project_item')
+                .select('qty, product_id')
+                .eq('project_id', projectId);
+
+            if (errorProjectItems) throw errorProjectItems;
+
+            if (!projectItems || projectItems.length === 0) {
+                console.log('Nenhum item encontrado para o projeto.');
+                return [];
+            }
+
+            // Passo 2: Buscar dados de `supplier_item`
+            const supplierItemIds = projectItems.map(item => item.product_id);
+            const { data: supplierItems, error: errorSupplierItems } = await supabase
+                .from('supplier_item')
+                .select('id, nameproduct, price, product_url, descproduct, supplier_id')
+                .in('id', supplierItemIds);
+
+            if (errorSupplierItems) throw errorSupplierItems;
+
+            // Passo 3: Buscar dados de `supplier_details`
+            const supplierIds = supplierItems.map(item => item.supplier_id);
+            const { data: supplierDetails, error: errorSupplierDetails } = await supabase
+                .from('supplier_details')
+                .select('id, company_name, service_region')
+                .in('id', supplierIds);
+
+            if (errorSupplierDetails) throw errorSupplierDetails;
+
+            // Passo 4: Combinar os dados
+            const result = projectItems.map(item => {
+                const supplierItem = supplierItems.find(sItem => sItem.id === item.product_id);
+                const supplierDetail = supplierDetails.find(sDetail => sDetail.id === supplierItem?.supplier_id);
+
+                return {
+                    qty: item.qty,
+                    product_id: item.product_id,
+                    supplier_item_id: supplierItem?.id,
+                    nameproduct: supplierItem?.nameproduct,
+                    price: supplierItem?.price,
+                    product_url: supplierItem?.product_url,
+                    descproduct: supplierItem?.descproduct,
+                    supplier_id: supplierItem?.supplier_id,
+                    company_name: supplierDetail?.company_name,
+                    service_region: supplierDetail?.service_region,
+                };
+            });
+
+            console.log("<getProjectItems GPT> ",result);
+            return result;
+        } catch (error) {
+            console.error('Erro ao obter itens do projeto:', error.message);
+            return [];
+        }
+    }
+
+    // Exemplo de uso:
+    getProjectItems(1); // Substitua "1" pelo ID do projeto desejado
 });
 
