@@ -281,10 +281,12 @@ document.addEventListener("DOMContentLoaded", () => {
         dialog.querySelector('.cardImage').querySelector('img').src = product_url;
         dialog.querySelector('.cardName').querySelector('p').innerText = nameproduct;
         dialog.querySelector('.qty').querySelector('p').innerText = `R$${parseFloat(price).toFixed(2)}`;
+        document.querySelector('div.appContainer').classList.add('blur');
         dialog.style.display = 'block';
 
         // disable dialog
         document.querySelector('input.close_dialog').addEventListener('click', () => {
+            document.querySelector('div.appContainer').classList.remove('blur');
             dialog.style.display = 'none';
             dialog.querySelector('input[type="number"]').value = 1;
         });
@@ -300,6 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
             addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store, qty_selected);
 
             // close the dialog
+            document.querySelector('div.appContainer').classList.remove('blur');
             dialog.style.display = 'none';
             dialog.querySelector('input[type="number"]').value = 1;
 
