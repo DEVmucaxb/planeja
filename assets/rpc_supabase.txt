@@ -140,3 +140,46 @@ $$ language plpgsql;
 /* funciona perfeitamente */
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create or replace function get_user_projects(parametro_uuid uuid)
+returns setof public.project as $$
+declare
+    user_id_var bigint; -- Renomeamos a variável para evitar ambiguidade
+begin
+    -- Busca o ID do usuário correspondente ao user_uuid fornecido
+    select id into user_id_var
+    from public.app_user
+    where user_uuid = parametro_uuid;
+
+    -- Retorna todos os projetos associados ao usuário encontrado
+    return query
+    select *
+    from public.project
+    where user_id = user_id_var;
+
+end;
+$$ language plpgsql;
+
+
+-- select * from get_user_projects('uuid_do_usuario_aqui');
+
+-- select * from get_user_projects('1e712402-3d74-49af-819d-dba7f8ab27e9');
+
+/* funciona */
