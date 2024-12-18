@@ -88,6 +88,19 @@ header div.appbar p {
     font-size: 36px;
 }
 
+header select {
+    width: 60%;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+header section {
+    width: 80%;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-top: 40px;
+    padding: 8px;
+}
 
 
 

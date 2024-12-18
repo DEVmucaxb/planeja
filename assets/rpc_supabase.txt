@@ -159,27 +159,45 @@ $$ language plpgsql;
 
 
 create or replace function get_user_projects(parametro_uuid uuid)
-returns setof public.project as $$
+returns table (
+    project_id bigint,
+    project_name varchar(30),
+    estimated_price numeric(9,2),
+    event_date date,
+    created_at timestamp,
+    updated_at timestamp,
+    city text,
+    postal_code text,
+    house_number text
+) as $$
 declare
-    user_id_var bigint; -- Renomeamos a variável para evitar ambiguidade
+    user_id_var bigint; -- Variável para armazenar o ID do usuário
 begin
     -- Busca o ID do usuário correspondente ao user_uuid fornecido
     select id into user_id_var
     from public.app_user
     where user_uuid = parametro_uuid;
 
-    -- Retorna todos os projetos associados ao usuário encontrado
+    -- Retorna os projetos e informações do endereço associados ao usuário
     return query
-    select *
-    from public.project
-    where user_id = user_id_var;
+    select 
+        p.id as project_id,
+        p.name as project_name,
+        p.estimated_price,
+        p.event_date,
+        p.created_at,
+        p.updated_at,
+        a.city,
+        a.postal_code,
+        a.house_number
+    from public.project p
+    left join public.address a on p.id = a.project_id
+    where p.user_id = user_id_var;
 
 end;
 $$ language plpgsql;
 
-
--- select * from get_user_projects('uuid_do_usuario_aqui');
-
 -- select * from get_user_projects('1e712402-3d74-49af-819d-dba7f8ab27e9');
+-- select * from get_user_projects('uuid_do_usuario_aqui');
 
 /* funciona */
