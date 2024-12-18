@@ -18,8 +18,6 @@ let app_user_id = sessionStorage.getItem('app_user_id') || null;
 
 
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
 
     //______________________funções______________________
@@ -127,22 +125,88 @@ document.addEventListener("DOMContentLoaded", () => {
         }; n();
     };
 
+    async function creatUserEvent() {
+        const dialog = document.querySelector('dialog');
+        const name = dialog.querySelector('#eventName_input').value;
+        const event_date = dialog.querySelector('#eventDate_input').value;
 
+        if (!name) {
+            alert('Por favor, insira um nome para o evento.');
+            return;
+        };
 
+        if (!event_date) {
+            alert('Por favor, insira uma data para o evento.');
+            return;
+        };
+
+        try {
+            const { data, error } = await supabase
+                .rpc('create_project', {
+                    name,          // Parâmetro para o nome do projeto
+                    event_date,    // Parâmetro para a data do evento
+                    parametro_user_uuid: auth_uuid, // Parâmetro para o UUID do usuário
+                });
+
+            if (error) {
+                console.error('Erro ao criar evento:', error);
+                return { success: false, message: error.message };
+            };
+
+            // execute user events again
+            dialog.style.display = 'none';
+            homePageFunctions.getUserEvents();
+
+            console.log('Evento criado com sucesso:', data);
+            return { success: true, data };
+        } catch (err) {
+            console.error('Erro inesperado:', err);
+            return { success: false, message: 'Erro inesperado ao criar o evento' };
+        };
+    };
+
+    async function createEventModal() {
+        // show modal
+        const dialog = document.querySelector('dialog');
+        dialog.style.display = 'block';
+    };
 
     //funções da homePage
     const homePageFunctions = {
         'getUserEvents': async function () {
-            if (!app_user_id) { await get_appUserId() }
+            if (!app_user_id) { await get_appUserId() };
+
             const { data } = await supabase.rpc('get_project_summary', { parametro_id: app_user_id });
 
-            console.log(`valor enviado como parametro pela getUserEvents = ${app_user_id}`)
+            console.log(`<homepage> valor enviado como parâmetro pela getUserEvents = ${app_user_id}`);
             console.log(data);
 
             const listSize = data.length;
             console.log('tamanho array', listSize);
 
-            if (listSize < 1 || listSize === null || listSize === undefined) { return; };
+            if (listSize < 1 || listSize === null || listSize === undefined) {
+                document.querySelector('p.eventName').innerText = 'vc não possui eventos';
+                document.querySelector('section.eventsSection').innerHTML += `<input type="button" class="createEvent_button" value="criar evento">`
+
+                document.querySelector('.createEvent_button').removeEventListener('click', createEventModal);
+
+                document.querySelector('.createEvent_button').addEventListener('click', createEventModal);
+
+
+                
+                // create a new event
+                document.querySelector('.createEvent_btn').addEventListener('click', () => {
+                    creatUserEvent();
+                });
+
+                //close the modal
+                document.querySelector('.cancel_createEvent_btn').addEventListener('click', () => {
+                    const dialog = document.querySelector('dialog');
+                    dialog.style.display = 'none';
+                });
+
+                return;
+            };
 
             const eventsSectionEl = document.querySelector('section.eventsSection');
             eventsSectionEl.innerHTML = '';
@@ -308,7 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // impede recursividade
             document.querySelector('input.confirm_dialog').removeEventListener('click', confirmHandler);
-        }
+        };
     };
 
 
@@ -400,6 +464,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // get products by filter
         document.querySelector('#search_button').addEventListener('click', renderProducts);
+
+        // create a new event
+        document.querySelector('.createEvent_btn').addEventListener('click', () => {
+            creatUserEvent();
+        });
     };
 
 });

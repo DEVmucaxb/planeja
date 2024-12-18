@@ -13,6 +13,27 @@
 </head>
 
 <body data-currentPage="homePage">
+
+    <dialog>
+        <div>
+            <p>Criar novo evento</p>
+        </div>
+        <hr>
+        <div>
+            <label for="eventName_input">Nome: </label>
+            <input type="text" maxlength="30" placeholder="ex: meu casamento" id="eventName_input">
+        </div>
+        <div>
+            <label for="eventDate_input">data: </label>
+            <input type="date" value="2025-04-25" id="eventDate_input"/>
+        </div>
+        <div class="createEvent">
+            <input type="button" value="cancelar" class="cancel_createEvent_btn" />
+            <input type="button" value="criar" class="createEvent_btn" />
+        </div>
+
+    </dialog>
+
     <div class="appContainer">
         <header>
             <div class="appbar">
@@ -30,10 +51,10 @@
             <section class="eventsSection">
                 <div class="event">
                     <p class="eventName">
-                        vc não possui eventos
+                        vc não possui eventos...
                     </p>
                     <div class="subscore">
-                        <p>R$</p>
+                        <p></p>
                         <p class="subtotal">...</p>
                     </div>
                 </div>

@@ -5,7 +5,8 @@
     box-sizing: border-box;
 }
 
-:root { /*colors for the bottom nav bar*/
+:root {
+    /*colors for the bottom nav bar*/
     --color1: #4b39ef;
     --color2: #29fd53;
 }
@@ -25,6 +26,114 @@ body {
 ::-webkit-scrollbar {
     width: 0px;
     height: 0px;
+}
+
+.blur {
+    filter: blur(8px);
+    -webkit-filter: blur(4px);
+}
+
+dialog {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 60vw;
+    border-radius: 10px;
+    padding-bottom: 10px;
+    z-index: 1;
+}
+
+dialog>div:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+dialog p {
+    font-weight: 600;
+    font-size: 16px;
+    color: #fa2515;
+}
+
+dialog div {
+    padding: 8px;
+}
+
+dialog #eventName_input {
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+dialog #eventDate_input {
+    background-color: #0080ff;
+    color: #fff;
+    font-family: "Roboto Mono", monospace;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+div.createEvent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+dialog input[type=button].createEvent_btn {
+    margin-top: 10px;
+    width: 40%;
+    height: 32px;
+    padding: 4px;
+    border: none;
+    border-radius: 10px;
+    background-color: #fa2515;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+dialog input[type=button].cancel_createEvent_btn {
+    background-color: white;
+    color: #fa2515;
+    border: 1px solid #000;
+
+    margin-top: 10px;
+    width: 40%;
+    height: 32px;
+    padding: 4px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 12px;
+
+}
+
+::-webkit-calendar-picker-indicator {
+    background-color: #fff;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.createEvent_button {
+    display: block;
+    margin: 5px auto;
+    margin-top: 10px;
+    width: 40%;
+    height: 32px;
+    padding: 4px;
+    border: 1px solid black;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    background-color: #fa2515;
 }
 
 div.appContainer {
@@ -78,6 +187,12 @@ header div.advertisement {
     background-color: #fff;
     padding: 5px;
     border: 1px solid #4b39ef;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+header div.advertisement img {
+    border-radius: 16px;
 }
 
 main {
@@ -132,6 +247,7 @@ main section.templateSection {
     overflow-x: auto;
     overflow-y: hidden;
     background-color: #fff;
+    border-radius: 16px;
 
     & div.templateItem {
         display: inline-block;
@@ -167,7 +283,7 @@ footer {
     width: 100%;
     max-width: 400px;
     margin: 0px auto;
-    transform:translateY(-50%);
+    transform: translateY(-50%);
     position: fixed;
     bottom: 0;
 }
@@ -252,20 +368,22 @@ div.indicator {
     transition: 0.5s;
 }
 
-.indicator::before { /* never mind */}
+.indicator::before {
+    /* never mind */
+}
 
-.navigation ul li:nth-child(1).active ~ .indicator {
+.navigation ul li:nth-child(1).active~.indicator {
     transform: translateX(calc(70px * 0));
 }
 
-.navigation ul li:nth-child(2).active ~ .indicator {
+.navigation ul li:nth-child(2).active~.indicator {
     transform: translateX(calc(70px * 1));
 }
 
-.navigation ul li:nth-child(3).active ~ .indicator {
+.navigation ul li:nth-child(3).active~.indicator {
     transform: translateX(calc(70px * 2));
 }
 
-.navigation ul li:nth-child(4).active ~ .indicator {
+.navigation ul li:nth-child(4).active~.indicator {
     transform: translateX(calc(70px * 3));
 }
