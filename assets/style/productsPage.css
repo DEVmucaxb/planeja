@@ -17,11 +17,119 @@ body {
     height: 100vh;
 }
 
-
 ::-webkit-scrollbar {
     width: 0px;
     height: 0px;
 }
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* essa linha tá defasada */
+    margin: 0;
+    width: 0px;
+    height: 0px;
+}
+
+dialog {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 60vw;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+dialog div.cardImage {
+    float: left;
+    width: 50%;
+    height: 100%;
+
+    display: flex;
+
+    /*flex-direction: column;
+    justify-content: center;
+    align-items: center;*/
+    /* don't put this code*/
+    & img {
+        width: 100%;
+        border-radius: 8px;
+    }
+}
+
+dialog div.cardInfo {
+    float: right;
+    width: 50%;
+    height: 100%;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+}
+
+dialog .cardInfo .cardName {
+    height: 50%;
+    padding: 10px;
+    font-weight: bold;
+}
+
+dialog .cardInfo .qty {
+    height: 50%;
+    padding: 3px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+
+    & p {
+        padding: 1px;
+        padding-right: 20px;
+        font-size: 16px;
+        font-weight: normal;
+        color: #000;
+    }
+
+    & input[type=number] {
+        width: 40px;
+        font-size: 12px;
+        border: 1px solid black;
+        border-radius: 8px;
+        padding: 2px;
+    }
+}
+
+dialog .cardInfo .dialog_buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+dialog .cardInfo .dialog_buttons input[type=button] {
+    display: inline-block;
+    margin: auto;
+    margin-top: 10px;
+    width: 40%;
+    height: 32px;
+    padding: 4px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+dialog .cardInfo .dialog_buttons input[type=button]:nth-child(1) {
+    border: 1px solid #fa2515;
+    color: #000;
+}
+
+dialog .cardInfo .dialog_buttons input[type=button]:nth-child(2) {
+    background-color: #fa2515;
+}
+/*          acaba aqui           */
 
 div.appContainer {
     max-width: 400px;
@@ -86,7 +194,8 @@ header div.searchBar {
         border-radius: 10px;
     }
 
-    & input[type=button] { /*depois, adicionar a lógica para que se o botão for pra baixo (flexwrap) ele fique alinhado á direita*/
+    & input[type=button] {
+        /*depois, adicionar a lógica para que se o botão for pra baixo (flexwrap) ele fique alinhado á direita*/
         width: 30%;
         height: 32px;
         padding: 2px;

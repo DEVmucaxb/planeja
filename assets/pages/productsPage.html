@@ -16,6 +16,27 @@
 
 
 <body data-currentPage="productsPage">
+    <dialog>
+        <div class="cardImage">
+            <img src="../images/guests.jpg" alt="imagem produto">
+            <!-- would i put a image by default? -->
+        </div>
+        <div class="cardInfo">
+            <div class="cardName">
+                <p>{nome produto}</p>
+            </div>
+            <div class="qty">
+                <!--{preço e ícones}-->
+                <p>R$0,00</p>
+                <input type="number" value="1" min="1" max="10" placeholder="1">
+            </div>
+                <div class="dialog_buttons">
+                    <input type="button" value="fechar" class="close_dialog">
+                    <input type="button" value="adicionar" class="confirm_dialog">
+                </div>
+        </div>
+    </dialog>
+
     <div class="appContainer">
         <header>
             <div class="appbar">
@@ -36,7 +57,7 @@
                 <div class="productCard">
                     <div class="cardMain">
                         <div class="cardImage">
-                            <img src="" alt="imagem produto"> 
+                            <img src="" alt="imagem produto">
                             <!-- would i put a image by default? -->
                         </div>
                         <div class="cardInfo">
@@ -52,7 +73,8 @@
                     </div>
                     <div class="cardDesc">
                         <p class="descProduct"><!--lorem35--> Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Tenetur, incidunt totam magni aliquid dolor dolorem, repudiandae sed, excepturi possimus vero
+                            Tenetur, incidunt totam magni aliquid dolor dolorem, repudiandae sed, excepturi possimus
+                            vero
                             eaque tempora voluptates sapiente minima officiis dignissimos accusantium numquam laudantium
                             delectus rem accusamus vitae quod?</p>
                     </div>

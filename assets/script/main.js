@@ -229,24 +229,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-                        const ionIcon = cardItem.querySelector('ion-icon');
+                const ionIcon = cardItem.querySelector('ion-icon');
 
-            // Adiciona atributos `data-*` no ícone
-            ionIcon.dataset.product_id = product.product_id;
-            ionIcon.dataset.supplier_id = product.supplier_id;
-            ionIcon.dataset.supplier_company = product.supplier_company;
-            ionIcon.dataset.nameproduct = product.nameproduct;
+                // Adiciona atributos `data-*` no ícone
+                ionIcon.dataset.product_id = product.product_id;
+                ionIcon.dataset.supplier_id = product.supplier_id;
+                ionIcon.dataset.supplier_company = product.supplier_company;
+                ionIcon.dataset.nameproduct = product.nameproduct;
 
-            ionIcon.dataset.descproduct = product.descproduct;
-            ionIcon.dataset.price = product.price;
-            ionIcon.dataset.product_url = product.product_url;
-            ionIcon.dataset.category = product.category;
-            ionIcon.dataset.qty_in_store = product.qty_in_store;
+                ionIcon.dataset.descproduct = product.descproduct;
+                ionIcon.dataset.price = product.price;
+                ionIcon.dataset.product_url = product.product_url;
+                ionIcon.dataset.category = product.category;
+                ionIcon.dataset.qty_in_store = product.qty_in_store;
 
-            // Adiciona o evento `click` ao ícone
-            ionIcon.addEventListener('click', () => {
-                showModal(ionIcon);
-            });
+                // Adiciona o evento `click` ao ícone
+                ionIcon.addEventListener('click', () => {
+                    showModal(ionIcon);
+                });
 
                 // Adiciona o card ao elemento <main>
                 mainElement.appendChild(cardItem);
@@ -268,10 +268,33 @@ document.addEventListener("DOMContentLoaded", () => {
         const category = dataElement.getAttribute('data-category');
         const qty_in_store = dataElement.getAttribute('data-qty_in_store');
 
-        console.log(`id produto: ${product_id}, id fornecedor: ${supplier_id}, nome empresa: ${supplier_company}, nome produto: ${nameproduct}, descrição: ${descproduct}, preço: ${parseFloat(price).toFixed(2)}, url: ${product_url}, categoria: ${category}, qtde: ${qty_in_store}`);
+        console.log(`<function showModal> id produto: ${product_id}, id fornecedor: ${supplier_id}, nome empresa: ${supplier_company}, nome produto: ${nameproduct}, descrição: ${descproduct}, preço: ${parseFloat(price).toFixed(2)}, url: ${product_url}, categoria: ${category}, qtde: ${qty_in_store}`);
         // tudo ok daqui pra cima
 
-        
+        // display dialog modal in the screen
+        const dialog = document.querySelector('dialog');
+        dialog.style.display = 'block';
+
+        // disable dialog
+        document.querySelector('input.close_dialog').addEventListener('click', () => {
+            dialog.style.display = 'none';
+            dialog.querySelector('input[type="number"]').value = 1;
+        });
+
+        // add a product in the kart
+        document.querySelector('input.confirm_dialog').addEventListener('click', () => {
+            // data to send for addKart function
+            addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store);
+
+            // close the dialog
+            dialog.style.display = 'none';
+            dialog.querySelector('input[type="number"]').value = 1;
+        });
+    };
+
+    // add a product in the kart
+    function addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store) {
+        console.log(`<function addKart> dados recebidos: ${nameproduct}, ${product_url}`); // tá funcionando!
     };
 
 
@@ -360,7 +383,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //________productsPage________
     if (currentPage === 'productsPage') {
         renderProducts();
-        
+
+        // get products by filter
         document.querySelector('#search_button').addEventListener('click', renderProducts);
     };
 
