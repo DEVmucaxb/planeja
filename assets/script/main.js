@@ -286,11 +286,10 @@ document.addEventListener("DOMContentLoaded", () => {
             dialog.querySelector('input[type="number"]').value = 1;
         });
 
-        // add a product in the kart
-        document.querySelector('input.confirm_dialog').addEventListener('click', () => {
-            console.log("teste, deu recursividade aqui"); //até agora tava ok, mas aqui executa 2 vezes
-            
+        document.querySelector('input.confirm_dialog').addEventListener('click', confirmHandler);
 
+        function confirmHandler() {
+            
             // qty that the user wants to buy
             const qty_selected = parseInt(dialog.querySelector('input[type="number"]').value);
 
@@ -300,7 +299,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // close the dialog
             dialog.style.display = 'none';
             dialog.querySelector('input[type="number"]').value = 1;
-        });
+
+            // impede recursividade
+            document.querySelector('input.confirm_dialog').removeEventListener('click', confirmHandler);
+        }
     };
 
 
