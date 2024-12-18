@@ -102,6 +102,28 @@ header section {
     padding: 8px;
 }
 
+header section div.finishEvent {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 4px;
+    background-color: #29fd53;
+    
+    border-radius: 8px;
+
+    & p {
+        font-size: 16px;
+        font-weight: 500;
+        padding: 4px;
+    }
+
+    & ion-icon {
+        padding: 4px;
+        font-size: 24px;
+    }
+}
+
 
 
 

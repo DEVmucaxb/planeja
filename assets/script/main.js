@@ -500,23 +500,29 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isFirstRender) {
             isFirstRender = false;
 
-            const sectionEl = document.querySelector('section');
+            const sectionEl = document.createElement('section');
             sectionEl.innerHTML = `<section>
                 <p>${data[0].project_name}</p>
                 <div>
                     <p>cep: ${data[0].postal_code}, ${data[0].city}, Nº${data[0].house_number}:</p>
                 </div>
                 <p>R$${data[0].estimated_price}</p>
-                <div>
+                <div class="finishEvent">
                     <p>finalizar</p>
                     <ion-icon name="arrow-forward-outline"></ion-icon>
                 </div>
               </section>`;
-
-            // make a new RPC
-            // ...
+            document.querySelector('header').appendChild(sectionEl);
+            
+            
             //render all the data in the <select>
             // ...
+
+
+
+            // get supabase cards (poducts) data
+            const cardItens = await getProjectItems(1) // <- id do projeto selecionado
+            console.log(cardItens[0].qty);
 
             //render all of the data in the main
             const mainEl = document.querySelector('main');
@@ -614,6 +620,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Exemplo de uso:
-    getProjectItems(1); // Substitua "1" pelo ID do projeto desejado
+    //getProjectItems(1); // Substitua "1" pelo ID do projeto desejado
 });
 
