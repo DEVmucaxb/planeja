@@ -218,3 +218,42 @@ $$ language plpgsql;
 -- select * from get_user_projects('uuid_do_usuario_aqui');
 
 /* funciona */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- get_product_items /*esse código funciona perfeitamente, mas não quando está dentro de uma procedure*/
+SELECT
+'meu codigo' as my,
+    pi.qty,
+    pi.product_id,
+    si.id AS supplier_item_id,
+    si.nameproduct,
+    si.price,
+    si.product_url,
+    si.descproduct,
+    si.supplier_id,
+    sd.company_name,
+    sd.service_region
+FROM project_item pi
+INNER JOIN supplier_item si ON si.id = pi.product_id
+inner join supplier_details sd ON sd.id = si.supplier_id
+WHERE pi.project_id = 1; -- Substitua "1" pelo ID do projeto que deseja aplicar o filtro (`public`.`project`.`id`)
