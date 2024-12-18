@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector('.createEvent_button').addEventListener('click', createEventModal);
 
 
-                
+
                 // create a new event
                 document.querySelector('.createEvent_btn').addEventListener('click', () => {
                     creatUserEvent();
@@ -472,7 +472,26 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (currentPage === 'eventsPage') {
-        
+        //pegar o evento selecionado
+        document.querySelector('select').addEventListener('change', (e) => {
+            const selected = e.target.value; //opção selecionada
+            console.log('Opção selecionada:', selected);
+            getUserProjects(auth_uuid);
+        });
+    };
+
+    async function getUserProjects(parametroUuid) {
+        // Chama a função RPC (stored procedure) no banco de dados
+        const { data, error } = await supabase
+            .rpc('get_user_projects', { parametro_uuid: parametroUuid });
+
+        if (error) {
+            console.error('Erro ao chamar a função:', error.message);
+            return;
+        };
+
+        // Exibe os dados retornados
+        console.log('Projetos do usuário:', data);
     };
 
 });
