@@ -15,8 +15,10 @@ let auth_uuid = sessionStorage.getItem('auth_uuid') || null;
 
 let app_user_id = sessionStorage.getItem('app_user_id') || null;
 
-let currentProject;
+let currentProject_id = sessionStorage.getItem('currentProject_id') || null;
 
+
+let isFirstRender = true;
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -472,10 +474,15 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (currentPage === 'eventsPage') {
+        getUserProjects(auth_uuid);
         //pegar o evento selecionado
         document.querySelector('select').addEventListener('change', (e) => {
             const selected = e.target.value; //opção selecionada
             console.log('Opção selecionada:', selected);
+
+            currentProject_id = selected;
+            sessionStorage.setItem("currentProject_id", currentProject_id);
+
             getUserProjects(auth_uuid);
         });
     };
@@ -488,6 +495,32 @@ document.addEventListener("DOMContentLoaded", () => {
         if (error) {
             console.error('Erro ao chamar a função:', error.message);
             return;
+        };
+
+        if (isFirstRender) {
+            isFirstRender = false;
+
+            const sectionEl = document.querySelector('section');
+            sectionEl.innerHTML = `<section>
+                <p>${data[0].project_name}</p>
+                <div>
+                    <p>cep: ${data[0].postal_code}, ${data[0].city}, Nº${data[0].house_number}:</p>
+                </div>
+                <p>R$${data[0].estimated_price}</p>
+                <div>
+                    <p>finalizar</p>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+              </section>`;
+
+            // make a new RPC
+            // ...
+            //render all the data in the <select>
+            // ...
+
+            //render all of the data in the main
+            const mainEl = document.querySelector('main');
+            // ...
         };
 
         // Exibe os dados retornados
