@@ -278,6 +278,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // display dialog modal in the screen
         const dialog = document.querySelector('dialog');
+        dialog.querySelector('.cardImage').querySelector('img').src = product_url;
+        dialog.querySelector('.cardName').querySelector('p').innerText = nameproduct;
+        dialog.querySelector('.qty').querySelector('p').innerText = `R$${parseFloat(price).toFixed(2)}`;
         dialog.style.display = 'block';
 
         // disable dialog
@@ -289,7 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector('input.confirm_dialog').addEventListener('click', confirmHandler);
 
         function confirmHandler() {
-            
+
             // qty that the user wants to buy
             const qty_selected = parseInt(dialog.querySelector('input[type="number"]').value);
 
