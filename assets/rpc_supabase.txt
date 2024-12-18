@@ -96,3 +96,47 @@ $$;
 -- select * from public.filter_products('filtro');
 
 -- FUNCIONA PERFEITAMENTE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create or replace function create_project(
+    name text,
+    event_date date,
+    parametro_user_uuid uuid
+) returns void as $$
+declare
+    user_id bigint;
+begin
+    -- Obter o user_id com base no parametro_user_uuid
+    select id
+    into user_id
+    from public.app_user
+    where user_uuid = parametro_user_uuid;
+
+    -- Verificar se o user_id foi encontrado
+    if user_id is null then
+        raise exception 'Usuário não encontrado para o UUID fornecido';
+    end if;
+
+    -- Inserir o projeto na tabela project
+    insert into public.project (user_id, name, event_date)
+    values (user_id, name, event_date);
+end;
+$$ language plpgsql;
+
+-- select create_project('Nome do Projeto', '2024-12-25', '7a17b063-2f39-4030-bc51-863d35f5607d');
+
+/* funciona perfeitamente */
+
+

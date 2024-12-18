@@ -28,93 +28,6 @@ body {
     height: 0px;
 }
 
-.blur {
-    filter: blur(8px);
-    -webkit-filter: blur(4px);
-}
-
-dialog {
-    display: none;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-
-    width: 60vw;
-    border-radius: 10px;
-    padding-bottom: 10px;
-    z-index: 1;
-}
-
-dialog>div:nth-child(1) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-dialog p {
-    font-weight: 600;
-    font-size: 16px;
-    color: #fa2515;
-}
-
-dialog div {
-    padding: 8px;
-}
-
-dialog #eventName_input {
-    font-size: 16px;
-    border-radius: 8px;
-    max-width: 70%;
-    padding: 4px;
-}
-
-dialog #eventDate_input {
-    background-color: #0080ff;
-    color: #fff;
-    font-family: "Roboto Mono", monospace;
-    font-size: 18px;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    padding: 2px;
-}
-
-div.createEvent {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-dialog input[type=button].createEvent_btn {
-    margin-top: 10px;
-    width: 40%;
-    height: 32px;
-    padding: 4px;
-    border: none;
-    border-radius: 10px;
-    background-color: #fa2515;
-    color: white;
-    font-weight: bold;
-    font-size: 12px;
-}
-
-dialog input[type=button].cancel_createEvent_btn {
-    background-color: white;
-    color: #fa2515;
-    border: 1px solid #000;
-
-    margin-top: 10px;
-    width: 40%;
-    height: 32px;
-    padding: 4px;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 12px;
-
-}
-
 ::-webkit-calendar-picker-indicator {
     background-color: #fff;
     padding: 5px;
@@ -122,20 +35,11 @@ dialog input[type=button].cancel_createEvent_btn {
     border-radius: 3px;
 }
 
-.createEvent_button {
-    display: block;
-    margin: 5px auto;
-    margin-top: 10px;
-    width: 40%;
-    height: 32px;
-    padding: 4px;
-    border: 1px solid black;
-    border-radius: 10px;
-    color: white;
-    font-weight: bold;
-    font-size: 12px;
-    background-color: #fa2515;
+.blur {
+    filter: blur(8px);
+    -webkit-filter: blur(4px);
 }
+
 
 div.appContainer {
     max-width: 400px;
@@ -184,97 +88,20 @@ header div.appbar p {
     font-size: 36px;
 }
 
-header div.advertisement {
-    background-color: #fff;
-    padding: 5px;
-    border: 1px solid #4b39ef;
-    border-radius: 16px;
-    overflow: hidden;
-}
 
-header div.advertisement img {
-    border-radius: 16px;
-}
+
+
 
 main {
     padding-left: 16px;
     padding-right: 16px;
 }
 
-main section.eventsSection {
-    min-height: 50px;
-    background-color: white;
-    border: none;
-    border-radius: 12px;
-    padding-top: 10px;
-    padding-left: 16px;
-    padding-right: 16px;
-    overflow-y: scroll;
-}
-
-main section.eventsSection div.event {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    & p.eventName {
-        color: black;
-    }
-
-    & div.subscore {
-        padding-left: 15%;
-
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-    }
-}
 
 
-main p.template_hr {
-    color: #fff;
-    text-align: center;
-    padding-top: 20px;
-    padding-bottom: 10px;
-    font-size: 18px;
-    font-weight: normal;
-}
 
-main section.templateSection {
-    padding: 10px;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    background-color: #fff;
-    border-radius: 16px;
 
-    & div.templateItem {
-        display: inline-block;
-        position: relative;
-        /*perigoso*/
 
-        overflow: hidden;
-        border-radius: 10px;
-
-        & input[type="button"] {
-            display: inline-block;
-            position: absolute;
-            background-color: #fa2515;
-            color: white;
-            padding: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            border: 1px solid #000;
-            border-radius: 16px;
-
-            left: 50%;
-            top: 90%;
-            transform: translate(-50%, -100%);
-        }
-    }
-}
 
 footer {
     background-color: red;

@@ -15,7 +15,7 @@ let auth_uuid = sessionStorage.getItem('auth_uuid') || null;
 
 let app_user_id = sessionStorage.getItem('app_user_id') || null;
 
-
+let currentProject;
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -321,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // add a product in the kart
+    // add a product in the kart/project
     function addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store, qty_selected) {
         console.log(`<function addKart> dados recebidos: ${nameproduct}, ${product_url} o usuário quer ${qty_selected} unidades`); // tá funcionando!
     };
@@ -395,7 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.location.href = "../pages/homePage.html";
                     };
                     if (pageClicked === 'eventsPage') {
-                        //window.location.href = "";
+                        window.location.href = "../pages/eventsPage.html";
                     };
                     if (pageClicked === 'productsPage') {
                         window.location.href = "../pages/productsPage.html";
@@ -469,6 +469,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector('.createEvent_btn').addEventListener('click', () => {
             creatUserEvent();
         });
+    };
+
+    if (currentPage === 'eventsPage') {
+        
     };
 
 });
