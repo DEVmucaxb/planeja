@@ -1,4 +1,5 @@
 -- Criação da stored procedure que pega todos os eventos em que o project.user_id = parametro fornecido (id do usuário)
+
 CREATE OR REPLACE FUNCTION get_project_summary(parametro_id BIGINT)
 RETURNS TABLE (
     project_name VARCHAR(30),
@@ -7,6 +8,22 @@ RETURNS TABLE (
     subtotal NUMERIC(9,2)
 ) AS $$
 BEGIN
+    -- Atualiza o campo estimated_price para cada projeto do usuário
+    UPDATE project
+    SET estimated_price = COALESCE(subquery.total, 0)
+    FROM (
+        SELECT 
+            p.id AS project_id,
+            SUM(si.price * pi.qty) AS total
+        FROM project p
+        LEFT JOIN project_item pi ON p.id = pi.project_id
+        LEFT JOIN supplier_item si ON pi.product_id = si.id
+        WHERE p.user_id = parametro_id
+        GROUP BY p.id
+    ) AS subquery
+    WHERE project.id = subquery.project_id;
+
+    -- Retorna a tabela com os detalhes solicitados
     RETURN QUERY
     SELECT 
         p.name AS project_name,
@@ -17,7 +34,7 @@ BEGIN
     LEFT JOIN project_item pi ON p.id = pi.project_id
     LEFT JOIN supplier_item si ON pi.product_id = si.id
     WHERE p.user_id = parametro_id
-    GROUP BY p.id;
+    GROUP BY p.id, p.name;
 END;
 $$ LANGUAGE plpgsql;
 
