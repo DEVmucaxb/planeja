@@ -18,6 +18,8 @@ let app_user_id = sessionStorage.getItem('app_user_id') || null;
 let currentProject_id = sessionStorage.getItem('currentProject_id') || null;
 let currentIndexOfArray = null; // <getUserProjects> in this function, i need to get the index too
 
+let projectToAddItem = null;
+
 document.addEventListener("DOMContentLoaded", () => {
 
     //______________________funções______________________
@@ -304,8 +306,63 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // add a product in the kart/project
-    function addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store, qty_selected) {
-        console.log(`<function addKart> dados recebidos: ${nameproduct}, ${product_url} o usuário quer ${qty_selected} unidades`); // tá funcionando!
+    async function addKart(product_id, supplier_id, supplier_company, nameproduct, descproduct, price, product_url, category, qty_in_store, qty_selected) {
+
+        document.querySelector('div.btnContainer').querySelector('input').addEventListener('click', () => {
+            document.querySelector('#requireEvent').style.display = 'none';
+        });
+
+        const { data, error } = await supabase
+            .rpc('get_user_projects', { parametro_uuid: auth_uuid });
+
+        // check if the user has a project
+        if ((data.length - 1) >= 0) {
+
+            console.log(`<function addKart> dados recebidos: ${nameproduct}, ${product_url} o usuário quer ${qty_selected} unidades`); // tá funcionando!
+
+            const dialog = document.querySelector('#requireEvent');
+            const divEl = document.querySelector('#eventOpt');
+            divEl.innerHTML = '';
+
+            // pegar os eventos do usuário
+            const { data, error } = await supabase
+                .rpc('get_user_projects', { parametro_uuid: auth_uuid });
+
+            let temp = '';
+            data.forEach(item => {
+                temp += `<p class="eventOpt_"> ${item.project_name} <ion-icon name="arrow-forward-outline"></ion-icon></p> <hr>`;
+            });
+            divEl.innerHTML = temp;
+
+            const eventsList = divEl.querySelectorAll('p.eventOpt_');
+            eventsList.forEach((item) => {
+                item.addEventListener('click', async () => {
+                    const { data, error } = await supabase
+                        .rpc('add_or_increment_project_item', {
+                            product_id_input: product_id,
+                            project_id_input: currentProject_id,
+                            qty_input: qty_selected,
+                        });
+
+                    if (error) {
+                        alert('erro ao adicionar')
+                        console.error('Erro ao adicionar item ao Supabase:', error.message);
+                        dialog.style.display = 'none';
+                    } else {
+                        alert('adicionado com sucesso');
+                        dialog.style.display = 'none';
+                    }
+                })
+            });
+
+            dialog.style.display = 'flex';
+            setTimeout(() => { // inativity case
+                dialog.style.display = 'none';
+            }, 100000);
+        } else {
+            alert('Deves criar um evento antes');
+        };
+
     };
 
     function showModal(dataElement) {
@@ -448,9 +505,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector('#search_button').addEventListener('click', renderProducts);
 
         // create a new event
-        document.querySelector('.createEvent_btn').addEventListener('click', () => {
-            creatUserEvent();
-        });
+        if (getUserProjects)
+            document.querySelector('.createEvent_btn').addEventListener('click', () => {
+                creatUserEvent();
+            });
     };
 
 
@@ -586,6 +644,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <div class="cardInfo">
                                         <div class="cardName">
                                             <p>${item.nameproduct}</p>
+                                            <p>${item.qty} unidades </p>
                                         </div>
                                         <div class="cardActions">
                                             <p>R$ ${item.price.toFixed(2)}</p>
@@ -603,6 +662,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 //render all of the data in the main
 
                 mainEl.style.display = 'flex'
+                mainEl.innerHTML = '<p class="titleYourItens">Seus itens</p><hr>'
                 mainEl.innerHTML += temp;
             };
         } else {

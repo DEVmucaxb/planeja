@@ -257,3 +257,43 @@ FROM project_item pi
 INNER JOIN supplier_item si ON si.id = pi.product_id
 inner join supplier_details sd ON sd.id = si.supplier_id
 WHERE pi.project_id = 1; -- Substitua "1" pelo ID do projeto que deseja aplicar o filtro (`public`.`project`.`id`)
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE OR REPLACE FUNCTION add_or_increment_project_item(
+    product_id_input bigint,
+    project_id_input bigint,
+    qty_input smallint
+)
+RETURNS void AS $$
+BEGIN
+    -- Verifica se o registro já existe
+    IF EXISTS (
+        SELECT 1
+        FROM public.project_item
+        WHERE product_id = product_id_input
+        AND project_id = project_id_input
+    ) THEN
+        -- Incrementa a quantidade
+        UPDATE public.project_item
+        SET qty = qty + qty_input,
+            updated_at = now()
+        WHERE product_id = product_id_input
+        AND project_id = project_id_input;
+    ELSE
+        -- Insere um novo registro
+        INSERT INTO public.project_item (product_id, project_id, qty)
+        VALUES (product_id_input, project_id_input, qty_input);
+    END IF;
+END;
+$$ LANGUAGE plpgsql;

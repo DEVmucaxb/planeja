@@ -135,7 +135,66 @@ dialog .cardInfo .dialog_buttons input[type=button]:nth-child(1) {
 dialog .cardInfo .dialog_buttons input[type=button]:nth-child(2) {
     background-color: #fa2515;
 }
-/*          acaba aqui           */
+
+dialog#requireEvent {
+    display: none;
+    flex: 1 1 auto;
+    overflow-y: scroll;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 300px;
+    color: #000;
+
+
+    width: 300px;
+}
+
+dialog#requireEvent section.main > p {
+    font-weight: bold;
+    color: #fa2515;
+    text-align: center;
+    padding: 8px;
+
+}
+
+dialog#requireEvent section.main div#eventOpt {
+    padding: 10px;
+    & p.eventOpt_ {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding-top: 16px;
+        padding-bottom: 4px;
+    }
+
+    & p.eventOpt_ ion-icon {
+        background-color: #0f0;
+        font-size: 24px;
+        border-radius: 8px;
+        margin-left: 10px;
+
+    }
+}
+
+dialog#requireEvent div.btnContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+
+    & input[type=button] {
+        background-color: #fa2515;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+}
 
 div.appContainer {
     max-width: 400px;
@@ -174,11 +233,12 @@ header div.appbar img {
     display: inline-block;
     width: 50px;
     border-radius: 50%;
+    border: 1px solid #fff;
 }
 
 header div.appbar p {
     display: inline-block;
-    color: #fa2515;
+    color: #fff;
     padding-left: 10px;
     padding-right: 10px;
     transform: translateY(-10px);
@@ -215,6 +275,7 @@ header div.searchBar {
 }
 
 main {
+    height: 100%;
     background-color: #fff;
     padding-left: 16px;
     padding-right: 16px;

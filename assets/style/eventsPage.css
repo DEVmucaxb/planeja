@@ -143,6 +143,13 @@ main {
     overflow-y: scroll;
 }
 
+main p.titleYourItens {
+    font-size: 24px;
+    color: #000;
+    text-align: center;
+    padding-bottom: 8px;
+}
+
 /* i gonna the CSS of productsPage.css */
 main div.cardContainer {
     padding-top: 24px;
