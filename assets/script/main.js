@@ -16,10 +16,7 @@ let auth_uuid = sessionStorage.getItem('auth_uuid') || null;
 let app_user_id = sessionStorage.getItem('app_user_id') || null;
 
 let currentProject_id = sessionStorage.getItem('currentProject_id') || null;
-let currentIndexOfArray = sessionStorage.getItem('currentProject_id') || null; // <getUserProjects> in this function, i need to get the index too
-
-
-let isFirstRender = true;
+let currentIndexOfArray = null; // <getUserProjects> in this function, i need to get the index too
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -477,32 +474,34 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('tem eventos: ', (data.length - 1) >= 0 ? 'sim' : 'nao');
         if ((data.length - 1) >= 0) { // has events? yes or no?
 
-            currentIndexOfArray = 0; /* por enquanto (guarda o índice dos dados do projeto) */
+            console.log(currentIndexOfArray);
+            if (currentIndexOfArray === null) {
+                currentIndexOfArray = 0; /* por enquanto (guarda o índice dos dados do projeto) */
+                currentIndexOfArray = parseInt(currentIndexOfArray);
+            };
+
             currentProject_id = data[currentIndexOfArray].project_id;
 
-            if (isFirstRender) {
-                isFirstRender = false;
+            console.log('debugando ', data[currentIndexOfArray])
+            console.log('debugando ', data[currentIndexOfArray].postal_code)
 
-                console.log('debugando', data[currentIndexOfArray])
-                console.log('debugando', data[currentIndexOfArray].postal_code)
+            console.log("currentProject_id: ", currentProject_id);
+            const sectionEl = document.createElement('section');
+            // checar se os dados são null (não informados)
+            if (data[currentIndexOfArray].postal_code === null) {
+                data[currentIndexOfArray].postal_code = 'não informado';
+            };
+            if (data[currentIndexOfArray].house_number === null) {
+                data[currentIndexOfArray].house_number = 'não informado';
+            };
+            if (data[currentIndexOfArray].city === null) {
+                data[currentIndexOfArray].city = 'não informada';
+            };
+            if (data[currentIndexOfArray].event_date === null) {
+                data[currentIndexOfArray].event_date = 'não informada';
+            };
 
-                console.log("currentProject_id: ", currentProject_id);
-                const sectionEl = document.createElement('section');
-                // checar se os dados são null (não informados)
-                if (data[currentIndexOfArray].postal_code === null) {
-                    data[currentIndexOfArray].postal_code = 'não informado';
-                };
-                if (data[currentIndexOfArray].house_number === null) {
-                    data[currentIndexOfArray].house_number = 'não informado';
-                };
-                if (data[currentIndexOfArray].city === null) {
-                    data[currentIndexOfArray].city = 'não informada';
-                };
-                if (data[currentIndexOfArray].event_date === null) {
-                    data[currentIndexOfArray].event_date = 'não informada';
-                };
-
-                sectionEl.innerHTML = `
+            sectionEl.innerHTML = `
                 <p>${data[currentIndexOfArray].project_name}</p>
                 <div>
                 <p>cidade: ${data[currentIndexOfArray].city}</p>
@@ -515,47 +514,58 @@ document.addEventListener("DOMContentLoaded", () => {
                     <ion-icon name="arrow-forward-outline"></ion-icon>
                 </div>
                 `;
-                document.querySelector('header').appendChild(sectionEl);
+            document.querySelector('header').appendChild(sectionEl);
 
 
-                //render all the data in the <select>
-                const selectEl = document.querySelector('select');
-                selectEl.innerHTML = '';
+            //render all the data in the <select>
+            const selectEl = document.querySelector('select');
+            selectEl.innerHTML = '';
 
-                console.log('<getUserProjects> eventos do usuário: ', data)
-                data.forEach((item, indice) => {
+            console.log('<getUserProjects> eventos do usuário: ', data)
 
-                    const selectChild = document.createElement('option'); selectChild.setAttribute('name', 'user_projects'); selectChild.setAttribute('value', `${indice}`); selectChild.dataset.project_id = `${item.project_id}`; selectChild.innerHTML = item.project_name;
-                    selectEl.appendChild(selectChild);
-                });
+            // renderizar dados do <select>
+            data.forEach((item, indice) => {
+                selectEl.innerHTML += `
+                    <option name="user_projects" value="${indice}" data-project_id="${item.project_id}">
+                    ${item.project_name}
+                    </option>
+                    `;
+            });
+            document.querySelector('select').selectedIndex = currentIndexOfArray;
 
-                ;
-                //pegar o evento selecionado
-                document.querySelector('select').addEventListener('change', (e) => {
+            ;
+            //pegar o evento selecionado
+            document.querySelector('select').addEventListener('change', (e) => {
 
-                    const selectedOption = e.target.selectedOptions[0]; // A primeira opção selecionada (a opc. selec. sempre é a primeira)
-                    const index_selected = e.target.selectedIndex; // Índice da opção selecionada
-                    console.log('Índice da opção selecionada:', index_selected);
+                const selectedOption = e.target.selectedOptions[0]; // A primeira opção selecionada (a opc. selec. sempre é a primeira)
+                currentIndexOfArray = e.target.selectedIndex; // Índice da opção selecionada
+                console.log('Índice da opção selecionada:', currentIndexOfArray);
 
-                    // Obtém o atributo data-project_id da opção selecionada
-                    currentProject_id = parseInt(selectedOption.dataset.project_id);
-                    console.log('currentProject_id:', currentProject_id);
+                // Obtém o atributo data-project_id da opção selecionada
+                currentProject_id = parseInt(selectedOption.dataset.project_id);
+                console.log('currentProject_id:', currentProject_id);
 
-                    // Armazena o ID no sessionStorage
-                    sessionStorage.setItem("currentProject_id", currentProject_id);
+                // Armazenamento no sessionStorage
+                sessionStorage.setItem("currentProject_id", currentProject_id);
+                sessionStorage.setItem("currentIndexOfArray", currentIndexOfArray);
+
+                /* por algum motivo, após a 1 execução, ele dá o erro:
+                Uncaught TypeError: Cannot read properties of null (reading 'remove')
+                at HTMLSelectElement.<anonymous> (main.js:551:54)
+                */ // vai entender
+                document.querySelector('section').remove();
+                getUserProjects(auth_uuid);
+                return;
+            });
 
 
-                    getUserProjects(auth_uuid);
-                });
+            // get supabase cards (poducts) data
+            const cardItens = await getProjectItems(currentProject_id) // <- id do pro jeto selecionado
+            console.log('<getUserProjects> produtos do projeto: ', cardItens)
 
-
-                // get supabase cards (poducts) data
-                const cardItens = await getProjectItems(currentProject_id) // <- id do pro jeto selecionado
-                console.log('<getUserProjects> produtos do projeto: ', cardItens)
-
-                let temp = ``;
-                cardItens.forEach(item => {
-                    temp += `
+            let temp = ``;
+            cardItens.forEach(item => {
+                temp += `
                         <div class="productCard">
                             <div class="cardMain">
                                 <div class="cardImage">
@@ -575,12 +585,11 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <p class="descProduct">{item.descproduct}</p>
                             </div>
                         </div>`;
-                });
+            });
 
-                //render all of the data in the main
-                const mainEl = document.querySelector('main');
-                //mainEl.innerHTML += temp;
-            };
+            //render all of the data in the main
+            const mainEl = document.querySelector('main');
+            //mainEl.innerHTML += temp;
         } else {
             alert('Você não possui eventos');
             const mainEl = document.querySelector('main');
