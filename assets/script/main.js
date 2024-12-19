@@ -16,6 +16,7 @@ let auth_uuid = sessionStorage.getItem('auth_uuid') || null;
 let app_user_id = sessionStorage.getItem('app_user_id') || null;
 
 let currentProject_id = sessionStorage.getItem('currentProject_id') || null;
+let currentIndexOfArray = sessionStorage.getItem('currentProject_id') || null; // <getUserProjects> in this function, i need to get the index too
 
 
 let isFirstRender = true;
@@ -213,35 +214,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const eventsSectionEl = document.querySelector('section.eventsSection');
             eventsSectionEl.innerHTML = '';
 
+            let temp = '';
             for (let i = 0; i < listSize; i++) {
-                console.log(data[i]); console.log(i);
+                console.log('Renderizando eventos do usuário: ', data[i]); console.log(i);
 
-                const divItem = window.document.createElement('div');
-                divItem.classList.add('event');
-                //depois:
-                // divItem.innerHtml = `<div class="event"><p class="eventName">${dada[i].project_name} ..........<p>`
-
-                const pEventName = window.document.createElement('p');
-                pEventName.classList.add('eventName');
-                pEventName.innerText = `${data[i].project_name}`
-                const divSubscore = window.document.createElement('div');
-                divSubscore.classList.add('subscore');
-                const pPrefix = window.document.createElement('p');
-                pPrefix.innerText = 'R$';
-                const pSubtotal = window.document.createElement('p');
-                pSubtotal.classList.add('subtotal');
-                pSubtotal.innerText = `${data[i].subtotal}`;
-
-                divSubscore.appendChild(pPrefix);
-                divSubscore.appendChild(pSubtotal);
-
-                //adicionar tudo ao divItem
-                divItem.appendChild(pEventName);
-                divItem.appendChild(divSubscore);
-
-                eventsSectionEl.appendChild(divItem);
-            };
-
+                temp =
+                    `<div class="event">
+                    <p class="eventName">${data[i].project_name}</p>
+                    <div class="subscore">
+                    <p class="subtotal">R$${parseFloat(data[i].subtotal).toFixed(2)}</p>
+                </div>`
+            }; eventsSectionEl.innerHTML = temp;
 
         }
     };
@@ -473,60 +456,134 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
+
+
     if (currentPage === 'eventsPage') {
         getUserProjects(auth_uuid);
-        //pegar o evento selecionado
-        document.querySelector('select').addEventListener('change', (e) => {
-            const selected = e.target.value; //opção selecionada
-            console.log('Opção selecionada:', selected);
-
-            currentProject_id = selected;
-            sessionStorage.setItem("currentProject_id", currentProject_id);
-
-            getUserProjects(auth_uuid);
-        });
     };
 
     async function getUserProjects(parametroUuid) {
         // Chama a função RPC (stored procedure) no banco de dados
+        // para pegar os eventos do usuário
         const { data, error } = await supabase
             .rpc('get_user_projects', { parametro_uuid: parametroUuid });
+
 
         if (error) {
             console.error('Erro ao chamar a função:', error.message);
             return;
         };
 
-        if (isFirstRender) {
-            isFirstRender = false;
+        console.log('tem eventos: ', (data.length - 1) >= 0 ? 'sim' : 'nao');
+        if ((data.length - 1) >= 0) { // has events? yes or no?
 
-            const sectionEl = document.createElement('section');
-            sectionEl.innerHTML = `<section>
-                <p>${data[0].project_name}</p>
+            currentIndexOfArray = 0; /* por enquanto (guarda o índice dos dados do projeto) */
+            currentProject_id = data[currentIndexOfArray].project_id;
+
+            if (isFirstRender) {
+                isFirstRender = false;
+
+                console.log('debugando', data[currentIndexOfArray])
+                console.log('debugando', data[currentIndexOfArray].postal_code)
+
+                console.log("currentProject_id: ", currentProject_id);
+                const sectionEl = document.createElement('section');
+                // checar se os dados são null (não informados)
+                if (data[currentIndexOfArray].postal_code === null) {
+                    data[currentIndexOfArray].postal_code = 'não informado';
+                };
+                if (data[currentIndexOfArray].house_number === null) {
+                    data[currentIndexOfArray].house_number = 'não informado';
+                };
+                if (data[currentIndexOfArray].city === null) {
+                    data[currentIndexOfArray].city = 'não informada';
+                };
+                if (data[currentIndexOfArray].event_date === null) {
+                    data[currentIndexOfArray].event_date = 'não informada';
+                };
+
+                sectionEl.innerHTML = `
+                <p>${data[currentIndexOfArray].project_name}</p>
                 <div>
-                    <p>cep: ${data[0].postal_code}, ${data[0].city}, Nº${data[0].house_number}:</p>
+                <p>cidade: ${data[currentIndexOfArray].city}</p>
+                <p>cep: ${data[currentIndexOfArray].postal_code}, Nº: ${data[currentIndexOfArray].house_number}</p>
                 </div>
-                <p>R$${data[0].estimated_price}</p>
+                <p>R$${data[currentIndexOfArray].estimated_price.toFixed(2)}</p>
+                <p>Data de entrega: ${data[currentIndexOfArray].event_date}</p>
                 <div class="finishEvent">
                     <p>finalizar</p>
                     <ion-icon name="arrow-forward-outline"></ion-icon>
                 </div>
-              </section>`;
-            document.querySelector('header').appendChild(sectionEl);
-            
-            
-            //render all the data in the <select>
-            // ...
+                `;
+                document.querySelector('header').appendChild(sectionEl);
 
 
+                //render all the data in the <select>
+                const selectEl = document.querySelector('select');
+                selectEl.innerHTML = '';
 
-            // get supabase cards (poducts) data
-            const cardItens = await getProjectItems(1) // <- id do projeto selecionado
-            console.log(cardItens[0].qty);
+                console.log('<getUserProjects> eventos do usuário: ', data)
+                data.forEach((item, indice) => {
 
-            //render all of the data in the main
+                    const selectChild = document.createElement('option'); selectChild.setAttribute('name', 'user_projects'); selectChild.setAttribute('value', `${indice}`); selectChild.dataset.project_id = `${item.project_id}`; selectChild.innerHTML = item.project_name;
+                    selectEl.appendChild(selectChild);
+                });
+
+                ;
+                //pegar o evento selecionado
+                document.querySelector('select').addEventListener('change', (e) => {
+
+                    const selectedOption = e.target.selectedOptions[0]; // A primeira opção selecionada (a opc. selec. sempre é a primeira)
+                    const index_selected = e.target.selectedIndex; // Índice da opção selecionada
+                    console.log('Índice da opção selecionada:', index_selected);
+
+                    // Obtém o atributo data-project_id da opção selecionada
+                    currentProject_id = parseInt(selectedOption.dataset.project_id);
+                    console.log('currentProject_id:', currentProject_id);
+
+                    // Armazena o ID no sessionStorage
+                    sessionStorage.setItem("currentProject_id", currentProject_id);
+
+
+                    getUserProjects(auth_uuid);
+                });
+
+
+                // get supabase cards (poducts) data
+                const cardItens = await getProjectItems(currentProject_id) // <- id do pro jeto selecionado
+                console.log('<getUserProjects> produtos do projeto: ', cardItens)
+
+                let temp = ``;
+                cardItens.forEach(item => {
+                    temp += `
+                        <div class="productCard">
+                            <div class="cardMain">
+                                <div class="cardImage">
+                                    <img src="{item.product_url}" alt="imagem produto">
+                                </div>
+                                <div class="cardInfo">
+                                    <div class="cardName">
+                                        <p>{item.nameproduct}</p>
+                                    </div>
+                                    <div class="cardActions">
+                                        <p>R$ {item.price.toFixed(2)}</p>
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cardDesc">
+                                <p class="descProduct">{item.descproduct}</p>
+                            </div>
+                        </div>`;
+                });
+
+                //render all of the data in the main
+                const mainEl = document.querySelector('main');
+                //mainEl.innerHTML += temp;
+            };
+        } else {
+            alert('Você não possui eventos');
             const mainEl = document.querySelector('main');
-            // ...
         };
 
         // Exibe os dados retornados
@@ -611,13 +668,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 };
             });
 
-            console.log("<getProjectItems GPT> ",result);
+            console.log("<getProjectItems GPT> ", result);
             return result;
         } catch (error) {
             console.error('Erro ao obter itens do projeto:', error.message);
             return [];
         }
-    }
+    };
 
     // Exemplo de uso:
     //getProjectItems(1); // Substitua "1" pelo ID do projeto desejado
