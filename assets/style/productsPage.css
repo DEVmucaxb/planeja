@@ -142,13 +142,13 @@ div.appContainer {
     height: 100%;
     margin: auto;
 
-    /* these are for to make the app scrollable*/
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
+    /* paralax effect */
+    background-color: #fa2515;
+    /*tirar dps*/
+    background: url(../images/imgBackground/background1.jpg) no-repeat center center;
+    background-size: auto;
+    background-attachment: fixed;
 
-    flex: 1 1 auto;
-    overflow-y: scroll;
 }
 
 header {
@@ -205,7 +205,7 @@ header div.searchBar {
         width: 30%;
         height: 32px;
         padding: 2px;
-        border: none;
+        border: 1px solid #000;
         border-radius: 10px;
         background-color: #fa2515;
         color: white;
@@ -215,9 +215,22 @@ header div.searchBar {
 }
 
 main {
+    background-color: #fff;
     padding-left: 16px;
     padding-right: 16px;
     padding-bottom: 120px;
+
+    border-top-right-radius: 16px;
+    border-top-left-radius: 16px;
+
+
+    /* these are for to make the app scrollable*/
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+
+    flex: 1 1 auto;
+    overflow-y: scroll;
 }
 
 main div.cardContainer {

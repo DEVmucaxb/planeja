@@ -534,8 +534,9 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector('select').selectedIndex = currentIndexOfArray;
 
             ;
+
             //pegar o evento selecionado
-            document.querySelector('select').addEventListener('change', (e) => {
+            function changeOption(e) {
 
                 const selectedOption = e.target.selectedOptions[0]; // A primeira opção selecionada (a opc. selec. sempre é a primeira)
                 currentIndexOfArray = e.target.selectedIndex; // Índice da opção selecionada
@@ -555,44 +556,59 @@ document.addEventListener("DOMContentLoaded", () => {
                 */ // vai entender
                 document.querySelector('section').remove();
                 getUserProjects(auth_uuid);
+
+                // this line and changeOption() doesn't fix the problem
+                document.querySelector('select').removeEventListener('change', changeOption);
                 return;
-            });
+            };
+
+            document.querySelector('select').addEventListener('change', (e) => changeOption(e));
 
 
             // get supabase cards (poducts) data
-            const cardItens = await getProjectItems(currentProject_id) // <- id do pro jeto selecionado
-            console.log('<getUserProjects> produtos do projeto: ', cardItens)
+            const cardItens = await getProjectItems(currentProject_id) // <- id do projeto selecionado
+            console.log('<getUserProjects> produtos do projeto: ', cardItens);
+            const mainEl = document.querySelector('main');
+            mainEl.innerHTML = '';
+            mainEl.style.display = 'none';
 
-            let temp = ``;
-            cardItens.forEach(item => {
-                temp += `
-                        <div class="productCard">
-                            <div class="cardMain">
-                                <div class="cardImage">
-                                    <img src="{item.product_url}" alt="imagem produto">
-                                </div>
-                                <div class="cardInfo">
-                                    <div class="cardName">
-                                        <p>{item.nameproduct}</p>
+            if ((cardItens.length - 1) >= 0) { // project has events? 
+
+                let temp = ``;
+                cardItens.forEach(item => {
+                    temp += `
+                        <div class="cardContainer">
+                            <div class="productCard">
+                                <div class="cardMain">
+                                    <div class="cardImage">
+                                        <img src="${item.product_url}" alt="imagem produto">
                                     </div>
-                                    <div class="cardActions">
-                                        <p>R$ {item.price.toFixed(2)}</p>
-                                        <ion-icon name="add-outline"></ion-icon>
+                                    <div class="cardInfo">
+                                        <div class="cardName">
+                                            <p>${item.nameproduct}</p>
+                                        </div>
+                                        <div class="cardActions">
+                                            <p>R$ ${item.price.toFixed(2)}</p>
+                                            <ion-icon name="add-outline"></ion-icon>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="cardDesc">
-                                <p class="descProduct">{item.descproduct}</p>
+                                <div class="cardDesc">
+                                    <p class="descProduct">${item.descproduct}</p>
+                                </div>
                             </div>
                         </div>`;
-            });
+                });
 
-            //render all of the data in the main
-            const mainEl = document.querySelector('main');
-            //mainEl.innerHTML += temp;
+                //render all of the data in the main
+
+                mainEl.style.display = 'flex'
+                mainEl.innerHTML += temp;
+            };
         } else {
             alert('Você não possui eventos');
-            const mainEl = document.querySelector('main');
+            mainEl.innerHTML = '';
+            mainEl.style.display = 'none';
         };
 
         // Exibe os dados retornados
