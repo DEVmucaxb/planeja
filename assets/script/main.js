@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const { data, error } = await supabase
                     .rpc('create_project', {
-                        name:event_name,
+                        name: event_name,
                         event_date,
                         parametro_user_uuid: auth_uuid,
                         event_city,
@@ -215,26 +215,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (listSize < 1 || listSize === null || listSize === undefined) {
                 document.querySelector('p.eventName').innerText = 'vc não possui eventos';
-                document.querySelector('section.eventsSection').innerHTML += `<input type="button" class="createEvent_button" value="criar evento">`
-
-                return;
             };
 
             const eventsSectionEl = document.querySelector('section.eventsSection');
-            eventsSectionEl.innerHTML = '';
 
-            let temp = '';
-            for (let i = 0; i < listSize; i++) {
-                console.log('Renderizando eventos do usuário: ', data[i]); console.log(i);
+            if (listSize > 0) {
+                eventsSectionEl.innerHTML = '';
 
-                temp +=
-                    `<div class="event">
+                let temp = '';
+                for (let i = 0; i < listSize; i++) {
+                    console.log('Renderizando eventos do usuário: ', data[i]); console.log(i);
+
+                    temp +=
+                        `<div class="event">
                         <p class="eventName">${data[i].project_name}</p>
                         <div class="subscore">
                             <p class="subtotal">R$${parseFloat(data[i].subtotal).toFixed(2)}</p>
                         </div>
                     </div>`
-            }; eventsSectionEl.innerHTML = temp;
+                }; eventsSectionEl.innerHTML = temp;
+            };
 
             eventsSectionEl.innerHTML +=
                 '<input type="button" class="createEvent_button" value="criar evento" />';
