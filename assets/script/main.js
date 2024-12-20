@@ -122,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
             app_user_id = data[0].id;
             sessionStorage.setItem("app_user_id", app_user_id);
             console.log("ID obtido do usuário:", app_user_id);
-            alert("ID obtido do usuário:", app_user_id);
 
         }; n();
     };
