@@ -273,6 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             };
             console.log(data); // for debug
+            console.log('zé da manga:', data);
 
             // limpa todos os elementos dentro da tag <main> no HTML
             const mainElement = document.querySelector('main');
@@ -299,6 +300,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </div>
                             </div>
                             <div class="cardDesc">
+                                <div class="info">
+                                    <p class="category">categoria: <span class="category_span">${product.category}</p></span>
+                                    <p class="supplier_company">fornecedor: <span class="supplier_company_span">${product.supplier_company}</span></p>
+                                </div>
                                 <p class="descProduct">${product.descproduct}</p>
                             </div>
                         </div>`;
@@ -468,7 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.location.href = "../pages/productsPage.html";
                     };
                     if (pageClicked === 'profilePage') {
-                        //window.location.href = "";
+                        window.location.href = "../pages/profilePage.html";
                     };
                 };
             }, 550);
@@ -651,7 +656,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.querySelector('#HireEvent_confirm').removeEventListener('click', hireConfirm);
                     appEl.classList.remove('blur');
                     dialogEl.style.display = 'none';
-                }, 10000);
+                }, 100000); //1min 40s
             };
 
 
