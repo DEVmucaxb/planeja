@@ -340,6 +340,7 @@ main div.productCard .cardMain .cardImage {
     float: left;
     width: 50%;
     height: 100%;
+    max-height: 200px;
 
     display: flex;
 
