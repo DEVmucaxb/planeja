@@ -129,41 +129,68 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function creatUserEvent() {
         const dialog = document.querySelector('dialog');
-        const name = dialog.querySelector('#eventName_input').value;
-        const event_date = dialog.querySelector('#eventDate_input').value;
 
-        if (!name) {
-            alert('Por favor, insira um nome para o evento.');
-            return;
-        };
+        document.querySelector('input.createEvent_btn').addEventListener('click', createUserEvent_);
 
-        if (!event_date) {
-            alert('Por favor, insira uma data para o evento.');
-            return;
-        };
+        async function createUserEvent_() {
+            document.querySelector('input.createEvent_btn').removeEventListener('click', createUserEvent_);
 
-        try {
-            const { data, error } = await supabase
-                .rpc('create_project', {
-                    name,          // Parâmetro para o nome do projeto
-                    event_date,    // Parâmetro para a data do evento
-                    parametro_user_uuid: auth_uuid, // Parâmetro para o UUID do usuário
-                });
 
-            if (error) {
-                console.error('Erro ao criar evento:', error);
-                return { success: false, message: error.message };
+            const event_name = dialog.querySelector('#eventName_input').value;
+            const event_date = dialog.querySelector('#eventDate_input').value;
+            const event_city = dialog.querySelector('#eventCity_input').value.toString();
+            const event_cep = dialog.querySelector('#eventCep_input').value.toString();
+            const house_num = dialog.querySelector('#houseNum_input').value.toString();
+
+            // check if inputs fild are empty
+            if (!event_name) {
+                alert('insira um nome para o evento.');
+                return;
+            };
+            if (!event_date) {
+                alert('insira uma data para o evento.');
+                return;
+            };
+            if (!event_city) {
+                alert('insira a cidade.');
+                return;
+            };
+            if (!event_cep) {
+                alert('insira o cep do evento.');
+                return;
+            };
+            if (!house_num) {
+                alert('insira o nº da propriedade do evento.');
+                return;
             };
 
-            // execute user events again
-            dialog.style.display = 'none';
-            homePageFunctions.getUserEvents();
+            try {
+                const { data, error } = await supabase
+                    .rpc('create_project', {
+                        name:event_name,
+                        event_date,
+                        parametro_user_uuid: auth_uuid,
+                        event_city,
+                        event_cep,
+                        house_num
+                    });
 
-            console.log('Evento criado com sucesso:', data);
-            return { success: true, data };
-        } catch (err) {
-            console.error('Erro inesperado:', err);
-            return { success: false, message: 'Erro inesperado ao criar o evento' };
+                if (error) {
+                    console.error('Erro ao criar evento:', error);
+                    alert('erro ao criar evento');
+                    return { success: false, message: error.message };
+                };
+
+                // execute user events again
+                dialog.style.display = 'none';
+                homePageFunctions.getUserEvents();
+
+                console.log('Evento criado com sucesso:', data);
+                return { success: true, data };
+            } catch (err) {
+                console.error('Erro inesperado:', err);
+                return { success: false, message: 'Erro inesperado ao criar o evento' };
+            };
         };
     };
 
@@ -190,23 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector('p.eventName').innerText = 'vc não possui eventos';
                 document.querySelector('section.eventsSection').innerHTML += `<input type="button" class="createEvent_button" value="criar evento">`
 
-                document.querySelector('.createEvent_button').removeEventListener('click', createEventModal);
-
-                document.querySelector('.createEvent_button').addEventListener('click', createEventModal);
-
-
-
-                // create a new event
-                document.querySelector('.createEvent_btn').addEventListener('click', () => {
-                    creatUserEvent();
-                });
-
-                //close the modal
-                document.querySelector('.cancel_createEvent_btn').addEventListener('click', () => {
-                    const dialog = document.querySelector('dialog');
-                    dialog.style.display = 'none';
-                });
-
                 return;
             };
 
@@ -217,14 +227,32 @@ document.addEventListener("DOMContentLoaded", () => {
             for (let i = 0; i < listSize; i++) {
                 console.log('Renderizando eventos do usuário: ', data[i]); console.log(i);
 
-                temp =
+                temp +=
                     `<div class="event">
-                    <p class="eventName">${data[i].project_name}</p>
-                    <div class="subscore">
-                    <p class="subtotal">R$${parseFloat(data[i].subtotal).toFixed(2)}</p>
-                </div>`
+                        <p class="eventName">${data[i].project_name}</p>
+                        <div class="subscore">
+                            <p class="subtotal">R$${parseFloat(data[i].subtotal).toFixed(2)}</p>
+                        </div>
+                    </div>`
             }; eventsSectionEl.innerHTML = temp;
 
+            eventsSectionEl.innerHTML +=
+                '<input type="button" class="createEvent_button" value="criar evento" />';
+
+            document.querySelector('.createEvent_button').removeEventListener('click', createEventModal);
+
+            document.querySelector('.createEvent_button').addEventListener('click', createEventModal);
+
+            // create a new event
+            document.querySelector('.createEvent_btn').addEventListener('click', () => {
+                creatUserEvent();
+            });
+
+            //close the modal
+            document.querySelector('.cancel_createEvent_btn').addEventListener('click', () => {
+                const dialog = document.querySelector('dialog');
+                dialog.style.display = 'none';
+            });
         }
     };
 

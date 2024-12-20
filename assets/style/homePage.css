@@ -62,7 +62,15 @@ dialog div {
     padding: 8px;
 }
 
-dialog #eventName_input {
+dialog > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+dialog #eventName_input, #eventCity_input, #eventCep_input, #houseNum_input {
     font-size: 16px;
     border-radius: 8px;
     max-width: 70%;
@@ -202,6 +210,11 @@ main {
 }
 
 main section.eventsSection {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex: 1 1 auto;
+
     min-height: 50px;
     background-color: white;
     border: none;

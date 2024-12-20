@@ -130,29 +130,44 @@ $$;
 create or replace function create_project(
     name text,
     event_date date,
-    parametro_user_uuid uuid
-) returns void as $$
+    parametro_user_uuid uuid,
+    event_city text,
+    event_cep text,
+    house_num text
+)
+returns void as $$
 declare
     user_id bigint;
+    address_id bigint;
+    new_project_id bigint;  -- Renomeei a variável para evitar a ambiguidade
 begin
-    -- Obter o user_id com base no parametro_user_uuid
-    select id
-    into user_id
+    -- Obter o user_id com base no user_uuid fornecido
+    select id into user_id
     from public.app_user
     where user_uuid = parametro_user_uuid;
 
-    -- Verificar se o user_id foi encontrado
+    -- Verificar se o usuário existe
     if user_id is null then
-        raise exception 'Usuário não encontrado para o UUID fornecido';
+        raise exception 'Usuário não encontrado para o UUID fornecido.';
     end if;
 
-    -- Inserir o projeto na tabela project
-    insert into public.project (user_id, name, event_date)
-    values (user_id, name, event_date);
+    -- Inserir o endereço na tabela address e capturar o address_id gerado
+    insert into public.address (country, city, postal_code, house_number)
+    values ('Brasil', event_city, event_cep, house_num)
+    returning id into address_id;
+
+    -- Inserir o projeto na tabela project e capturar o new_project_id gerado
+    insert into public.project (user_id, name, event_date, address_id)
+    values (user_id, name, event_date, address_id)
+    returning id into new_project_id;
+
+    -- Atualizar o campo project_id na tabela address
+    update public.address
+    set project_id = new_project_id  -- Usando a variável renomeada
+    where id = address_id;
 end;
 $$ language plpgsql;
 
--- select create_project('Nome do Projeto', '2024-12-25', '7a17b063-2f39-4030-bc51-863d35f5607d');
 
 /* funciona perfeitamente */
 
