@@ -378,7 +378,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
 
                     if (error) {
-                        alert('adicionado com sucesso');
+                        alert('erro ao adicionar')
+                        console.error('Erro ao adicionar item ao Supabase:', error.message);
                         dialog.style.display = 'none';
                     } else {
                         alert('adicionado com sucesso');
