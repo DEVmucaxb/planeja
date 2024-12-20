@@ -13,6 +13,34 @@
 </head>
 
 <body data-currentPage="eventsPage">
+    <dialog>
+        <div class="btn_spacer">
+            <article id="header">
+                <div class="dialog_appbar">
+                    <img src="../images/icons/planeja_logo.png" alt="logo">
+                    <p>Planejá</p>
+                    <img src="../images/icons/default_profile_pic.jpg" alt="foto de perfil">
+                </div>
+                <hr>
+            </article>
+            <article class="main_info">
+                <p>Crédito</p>
+                <input type="text" id="credit_card_number" placeholder="Nº do cartão">
+                <div class="expiry_date_div">
+                    <input type="number" id="expiry_date_month" placeholder="MM" max="31" /> /
+                    <input type="number" id="expiry_date_year" placeholder="2030" max="2100" />
+                    <input type="number" id="cvv" placeholder="cvv" />
+                </div>
+                <input type="text" id="card_owner_name" minlength="10" placeholder="nome do titular do cartão" />
+                <input type="tel" id="card_owner_tel" placeholder="(081)91234-5678" />
+            </article>
+        </div>
+        <div id="div_buttons">
+            <input type="button" value="cancelar" id="HireEvent_cancel">
+            <input type="submit" value="Finalizar / Comprar" id="HireEvent_confirm">
+        </div>
+    </dialog>
+
     <div class="appContainer">
         <header>
             <div class="appbar">

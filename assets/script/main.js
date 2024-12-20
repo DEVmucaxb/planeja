@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (error) {
                 console.error("Erro ao buscar produtos:", error.message);
                 return;
-            }
+            };
             console.log(data); // for debug
 
             // limpa todos os elementos dentro da tag <main> no HTML
@@ -302,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch (err) {
             console.error("Erro inesperado:", err);
-        }
+        };
     };
 
     // add a product in the kart/project
@@ -573,6 +573,58 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 `;
             document.querySelector('header').appendChild(sectionEl);
+
+            // finish event function
+            document.querySelector('div.finishEvent').addEventListener('click', hireProject);
+            function hireProject() {
+                // cancel the hire
+                function hireCancel() {
+                    document.querySelector('#HireEvent_cancel').removeEventListener('click', hireCancel);
+                    appEl.classList.remove('blur');
+                    dialogEl.style.display = 'none';
+                };
+                document.querySelector('#HireEvent_cancel').addEventListener('click', hireCancel);
+
+                // confirm the hire
+                async function hireConfirm() {
+                    document.querySelector('#HireEvent_confirm').removeEventListener('click', hireConfirm); //this line doesn't work
+
+                    const { data: hire_data, error: hire_error } = await supabase.rpc('mark_project_as_hired', {
+                        id_projeto: currentProject_id
+                    });
+
+                    if (hire_error) {
+                        console.error('Erro ao contratar o evento:', hire_error.message);
+                        return null;
+                    } else {
+                        alert('Projeto contratado com sucesso:');
+                        alert('compra confirmada');
+                        appEl.classList.remove('blur');
+                        dialogEl.style.display = 'none';
+
+                        // redirecionar o usuário para a profilePage
+                        window.location.href = "../pages/profilePage.html";
+                    };
+                };
+                document.querySelector('#HireEvent_confirm').addEventListener('click', hireConfirm);
+
+                const appEl = document.querySelector('div.appContainer');
+                appEl.classList.add('blur');
+                // a bug with the icon
+                const bug = document.querySelector('div.finishEvent').querySelector('ion-icon');
+                bug.style.display = 'none';
+
+                //data[currentIndexOfArray].;
+
+                const dialogEl = document.querySelector('dialog');
+                dialogEl.style.display = 'flex'
+                setTimeout(() => {
+                    document.querySelector('#HireEvent_cancel').removeEventListener('click', hireCancel);
+                    document.querySelector('#HireEvent_confirm').removeEventListener('click', hireConfirm);
+                    appEl.classList.remove('blur');
+                    dialogEl.style.display = 'none';
+                }, 10000);
+            };
 
 
             //render all the data in the <select>

@@ -35,9 +35,122 @@ body {
     border-radius: 3px;
 }
 
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* essa linha tá defasada */
+    margin: 0;
+    width: 0px;
+    height: 0px;
+}
+
 .blur {
     filter: blur(8px);
     -webkit-filter: blur(4px);
+}
+
+
+dialog {
+    display: none;
+    /*flex when active*/
+    flex: 1 1 auto;
+    overflow-y: scroll;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 400px;
+    color: #000;
+    width: 300px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    border-radius: 16px;
+    border: 2px solid #000;
+    background-color: #fff;
+    z-index: 1;
+}
+
+dialog article#header div.dialog_appbar {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-bottom: 20px;
+
+    & img {
+        display: inline-block;
+        width: 50px;
+        border-radius: 50%;
+    }
+
+    & p {
+    display: inline-block;
+    color: #fa2515;
+    padding-left: 10px;
+    padding-right: 10px;
+    transform: translateY(-10px);
+    font-weight: 500;
+    font-size: 36px;
+    }
+}
+
+dialog article.main_info {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding: 10px;
+    gap: 10px;
+
+    & > p {
+        text-align: left;
+        color: #fa2515;
+        font-size: 24px;
+        padding-bottom: 4px;
+    }
+
+    & input[type=number], input[type=text], input[type=tel] {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #000;
+    }
+
+    #credit_card_number { width: 90%; }
+
+    & #expiry_date_month { width: 30px; }
+    & #expiry_date_year { width: 50px; }
+    & #cvv { width: 40px; }
+}
+
+dialog #card_owner_name { width: 90%; }
+
+dialog #card_owner_tel { width: 120px; }
+
+dialog #div_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+dialog input[type=button] {
+    padding: 8px;
+    background-color: gray;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 16px;
+}
+
+dialog input[type=submit] {
+    padding: 8px;
+    background-color: #fa2515;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid #000;
+    border-radius: 16px;
 }
 
 
@@ -108,7 +221,7 @@ header section div.finishEvent {
     justify-content: space-between;
     padding: 4px;
     background-color: #29fd53;
-    
+
     border-radius: 8px;
 
     & p {
@@ -135,7 +248,8 @@ main {
 
 
     /* these are for to make the app scrollable*/
-    display: none; /* when active == flex*/
+    display: none;
+    /* when active == flex*/
     flex-wrap: nowrap;
     flex-direction: column;
 

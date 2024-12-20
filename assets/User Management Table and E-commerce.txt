@@ -125,6 +125,7 @@ create table if not exists
     estimated_price numeric(9,2) not null default 0.00,
     address_id bigint,
     event_date date, -- date that the event will happen
+    is_hired varchar(3) default 'no', -- yes or no
     created_at timestamp default now(), -- for audit
     updated_at timestamp default now(), -- for audit
     foreign key (user_id) references app_user (id) on delete cascade,

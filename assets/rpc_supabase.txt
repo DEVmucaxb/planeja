@@ -297,3 +297,35 @@ BEGIN
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Criação da função para atualizar o campo is_hired (contratar projeto)
+create or replace function mark_project_as_hired(id_projeto bigint)
+returns void as $$
+begin
+    -- Atualiza o campo is_hired para "yes" onde o id corresponde ao parâmetro
+    update public.project
+    set is_hired = 'yes',
+        updated_at = now() -- Atualiza também o timestamp
+    where id = id_projeto;
+end;
+$$ language plpgsql;
+
+-- Exposição da função como RPC
+-- Para usar via Supabase, precisa habilitar o acesso público à função
+grant execute on function mark_project_as_hired(bigint) to public;
